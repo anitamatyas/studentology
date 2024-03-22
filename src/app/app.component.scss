@@ -1,0 +1,82 @@
+
+.bg {
+    background-image: url('/assets/images/blurry-gradient-haikei.svg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+// .body{
+//     margin: 0;
+//     font-family: sans-serif;
+//     color: white;
+//     background: #202020;
+//     overflow-x: hidden;
+// }
+
+// section{
+//     position: relative;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     min-height: 400px;
+//     padding: 100px 20vw;
+// }
+
+// .curve{
+//     position: absolute;
+//     height: 250px;
+//     width: 100%;
+//     bottom: 0;
+//     text-align: center;
+// }
+
+// .curve::before {
+//     content: '';
+//     display: block;
+//     position: absolute;
+//     border-radius: 100% 50%;
+//     width: 55%;
+//     height: 100%;
+//     transform: translate(85%, 60%);
+//     background-color: hsl(216, 21%, 16%);
+// }
+
+// .curve::after {
+//     content: '';
+//     display: block;
+//     position: absolute;
+//     border-radius: 100% 50%;
+//     width: 55%;
+//     height: 100%;
+//     background-color: #3c31dd;
+//     transform: translate(-4%, 40%);
+//     z-index: -1;
+// }
+
+// .blue{
+//     background: #3c31dd;
+// }
+
+// .red{
+//     background: #dd3f31;
+//     svg{
+//         position: relative;
+//         display: block;
+//         width: calc(100% + 1.3px);
+//         height: 129px;
+//         transform: rotateY(180deg);
+//     }
+
+//     .shape-fill{
+//         fill: #F6635C;
+//     }
+// }
+
+// .pink{
+//     background-image: url('/src/assets/images/stacked-waves-haikei.svg'); 
+// }
+
+// .dark{
+//     background: #0f0f10;
+// }

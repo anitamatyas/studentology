@@ -1,0 +1,99 @@
+.login-container {
+    background-image: url('/assets/images/blurry-gradient-haikei.svg');
+    /* Background image for the whole page */
+    background-size: cover;
+    /* Cover the entire page with the background image */
+    display: flex;
+    height: 100vh;
+    /* Make the page take up the full viewport height */
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+}
+
+.login-slogan {
+    text-align: center;
+    font-size: 3em;
+    color: white;
+}
+
+h2 {
+    font-size: 3em;
+    text-align: center;
+    font-weight: 800;
+}
+
+.login-wrapper {
+    padding: 3em;
+    height: 35em;
+    /* border: 1px solid white; */
+    border-radius: 20px;
+    /* background-color: white; */
+    /* opacity: 0.6; */
+    /* backdrop-filter: blur(10px); */
+    box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+    /* filter: blur(10px); */
+    background-color: rgb(255 255 255 / 99%);
+    backdrop-filter: blur(55px);
+    display: flex;
+    flex-direction: column;
+    gap: .8em;  
+}
+
+.logo-wrapper {
+    display: flex;
+    margin: 0 auto;
+    width: 2.6em;
+    height: 2.6em;
+    border: 2px solid lightgray;
+    border-radius: 50%;
+    align-items: center;
+    .google-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 2em;
+        width: 2em;
+    }
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+}
+
+.left-column {
+    gap: 4em;
+}
+
+.stud-logo-wrapper {
+    display: flex;
+    margin: 0 auto;
+    .stud-logo {
+        height: 4em;
+        width: fit-content;
+    }
+}
+
+
+.login-form {
+    border: 1px solid white;
+    max-width: 400px;
+    max-height: 600px;
+    /* Adjust the maximum width of the login form */
+    margin: 0 auto;
+    /* Center the login form horizontally */
+}
+
+input[type="text"],
+input[type="password"],
+button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
