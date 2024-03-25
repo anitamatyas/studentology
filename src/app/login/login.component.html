@@ -1,25 +1,45 @@
 <div class="login-container">
     <div class="left-column">
-        <span class="login-slogan">Empowering Students, Enriching Lives: Join the Studentology Experience!</span>
+        <div class="login-slogan">
+          <span>Login to Explore:<br></span>
+          <span>Your Journey of<br></span>
+          <span class="gradient-text">Knowledge<br></span>
+          <span>Awaits!<br></span>
+        </div>
+        <p class="subtext">Whether you're a curious student eager to learn or an inspired teacher looking to innovate, our platform bridges paths for both. Dive in and discover a world of educational possibilities!</p>
         <div class="stud-logo-wrapper">
-            <img class="stud-logo" src="/assets/images/studentology-high-resolution-logo-transparent.png" alt="Logo">
+            <img class="stud-logo" src="/assets/images/studentology-high-resolution-logo-black-transparent.png" alt="Logo">
         </div>
     </div>
     <div class="right-column">
         <div class="login-wrapper">
-            <h2>Sign In</h2>
+            <h2>Log in as a student</h2>
             <div class="logo-wrapper">
                 <img class="google-logo" src="/assets/images/google.png">
             </div>
+            <p id="email-instruction" class="form-text text-muted">Or use your email to sign in</p>
             <div class="login-form">
-                <!-- Your login form content here -->
-                <input type="text" placeholder="Username">
-                <input type="password" placeholder="Password">
-                <button>Login</button>
+                <form class="login-form">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-input" id="exampleInputPassword1" placeholder="Password" required>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                </div>
+                <button type="submit" class="login-btn">SIGN IN</button>
+                <div class="sign-up-text">
+                  <small>Don't have an account? </small><small style="font-style: italic; color: #F31559;">Sign up</small><br>
+                  <small>Are you a teacher? </small><small style="font-style: italic; color: #F31559;">Login as teacher</small>
+                </div>
+                </form>
             </div>
-                <!-- <ion-item>
-                  <ion-input label="Disabled input" value="53703" [disabled]="true"></ion-input>
-                </ion-item> -->
         </div>
     </div>
 </div>

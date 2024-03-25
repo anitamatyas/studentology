@@ -1,44 +1,120 @@
 .login-container {
-    background-image: url('/assets/images/blurry-gradient-haikei.svg');
-    /* Background image for the whole page */
-    background-size: cover;
-    /* Cover the entire page with the background image */
+    background-image:  url('/assets/images/wave-haikei.svg'), url('/assets/images/blurry-gradient-haikei.svg');
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    background-size: cover; 
     display: flex;
-    height: 100vh;
-    /* Make the page take up the full viewport height */
+    flex-direction: column;
+    background-attachment: fixed; // Make the background fixed
+
+    @media (min-width: 768px) {
+        height: 100vh;
+        flex-direction: row;
+    }
+
     justify-content: center;
     align-items: center;
-    font-family: "Roboto", sans-serif;
     font-style: normal;
+    padding: 4em;
+    @media (min-width: 768px) {
+        padding-bottom: 12em;
+    }
+
+    .left-column,
+    .right-column {
+        flex: 1;
+        @media (min-width: 768px) {
+            flex: none;
+            width: 50%;
+        }
+    }
+    .left-column {
+        text-align: center;
+        gap: 4em;
+    }
+
 }
 
 .login-slogan {
-    text-align: center;
-    font-size: 3em;
+    font-size: 23px;
+    font-weight: 800;
     color: white;
+    text-align: center;
+    line-height: 1em;
+    word-spacing: 30px;
+
+    @media (min-width: 768px) {
+        font-size: 48px;
+        text-align: left;
+    }
+    @media (min-width: 1400px) {
+        font-size: 60px;
+        text-align: left;
+    }
+        background: linear-gradient(160deg, #F31559, #6600FF);
+
+    /* Ensure the gradient is only applied to the text */
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    /* Make the text itself transparent, so only the background shows */
+    color: transparent;
+
+    /* Apply a white text shadow to make it stand out */
+    text-shadow: -2.9px -1px 1px rgba(255, 255, 255, 0.7);
+
+    /* Other styling for better appearance */
+    display: inline-block; /* Allows the gradient to fit the text size */
+
+    .gradient-text {
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, -4);
+        -webkit-text-stroke-width: 0.6px;
+        -webkit-text-stroke-color: #F31559;
+    }
+}
+
+.subtext {
+    font-size: 13px; /* Smaller than the main slogan */
+    color: #ffffff87; /* Adjust based on your background */
+    margin-top: 20px; /* Space it out from the main slogan */
+    line-height: 1.6; /* Improve readability */
+    text-align: center; /* Center-align if fits your design */
+    max-width: 100%; /* Prevent it from spanning too wide */
+    margin-left: auto; /* Centering the text block */
+    margin-right: auto; /* Centering the text block */
+    @media (min-width: 768px) {
+        font-size: 17px;
+        max-width: 80%; /* Prevent it from spanning too wide */
+    }
+    
 }
 
 h2 {
-    font-size: 3em;
+    font-size: 2em;
+    @media (min-width: 768px) {
+        font-size: 3em;
+    }
     text-align: center;
-    font-weight: 800;
+    font-weight: 300;
+    color: #565656;
+    letter-spacing: -3px;
+    margin: .2em;
 }
 
 .login-wrapper {
-    padding: 3em;
-    height: 35em;
-    /* border: 1px solid white; */
+    @media (max-width: 768px) {
+        margin-block: 3em;
+    }
+    padding: 2em;
+    height: 100%;
+    text-align: center;
     border-radius: 20px;
-    /* background-color: white; */
-    /* opacity: 0.6; */
-    /* backdrop-filter: blur(10px); */
     box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
-    /* filter: blur(10px); */
     background-color: rgb(255 255 255 / 99%);
     backdrop-filter: blur(55px);
     display: flex;
     flex-direction: column;
-    gap: .8em;  
+    gap: .3em;  
 }
 
 .logo-wrapper {
@@ -47,53 +123,106 @@ h2 {
     width: 2.6em;
     height: 2.6em;
     border: 2px solid lightgray;
-    border-radius: 50%;
+    border-radius: 6px;
     align-items: center;
     .google-logo {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        height: 2em;
-        width: 2em;
+        height: 1.2em;
+        width: 1.2em;
     }
 }
 
-.left-column,
-.right-column {
-    flex: 1;
-    padding: 20px;
+.login-btn {
+    background-image: linear-gradient(to right, #F31559, #6600FF);
+    color: white; /* Text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    &:hover, &:focus {
+        opacity: 0.8;
+    }
+    font-size: 16px;
+    font-weight: 400;
     display: flex;
-    flex-direction: column;
-    gap: 0.8em;
-}
-
-.left-column {
-    gap: 4em;
+    margin: 0 auto;
+    padding-inline: 4em;
+    margin-top: .5em;
 }
 
 .stud-logo-wrapper {
-    display: flex;
-    margin: 0 auto;
+    position: fixed;
+    left: 50%; /* Center horizontally */
+    bottom: 2em; /* Align at the bottom */
+    transform: translateX(-50%); /* Center align the logo */
     .stud-logo {
-        height: 4em;
+        height: 3em;
         width: fit-content;
+        opacity: 0.6;
+    }
+
+    @media (min-width: 768px) {
+        position: absolute;
+        left: 3em;
+        bottom: 4em;
+        transform: none;
+        .stud-logo {
+            height: 4em;
+            width: fit-content;
+        }
     }
 }
 
 
 .login-form {
     border: 1px solid white;
-    max-width: 400px;
-    max-height: 600px;
-    /* Adjust the maximum width of the login form */
-    margin: 0 auto;
-    /* Center the login form horizontally */
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: #858585;
+
+    .form-group {
+        margin-bottom: .5em;
+
+        label {
+            font-weight: 300;
+        }
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin: auto;
+        padding: .2em;
+    }
+
+    .sign-up-text {
+        padding-top: .5em;
+        text-align: center;
+    }
 }
 
-input[type="text"],
-input[type="password"],
-button {
+.form-input {
+    background-color: #f5f5f5;
     display: block;
     width: 100%;
-    margin-bottom: 10px;
+    height: 39px;
+    padding: 7px 15px;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.428571;
+    color: #555;
+    background-image: none;
+    border: none;
+    border-radius: 8px;
+    letter-spacing: 1px;
+    
+}
+
+input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #dcdcdc; /* Desired placeholder text color */
+    opacity: 1; /* Firefox */
+    letter-spacing: -1px;
 }
