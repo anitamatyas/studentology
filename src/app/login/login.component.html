@@ -1,10 +1,10 @@
 <div class="login-container">
     <div class="left-column">
         <div class="login-slogan">
-          <span>Login to Explore:<br></span>
-          <span>Your Journey of<br></span>
-          <span class="gradient-text">Knowledge<br></span>
-          <span>Awaits!<br></span>
+        <span>Login to Explore:<br></span>
+        <span>Your Journey of<br></span>
+        <span class="gradient-text">Knowledge<br></span>
+        <span>Awaits!<br></span>
         </div>
         <p class="subtext">Whether you're a curious student eager to learn or an inspired teacher looking to innovate, our platform bridges paths for both. Dive in and discover a world of educational possibilities!</p>
         <div class="stud-logo-wrapper">
@@ -13,30 +13,69 @@
     </div>
     <div class="right-column">
         <div class="login-wrapper">
-            <h2>Log in as a student</h2>
+            <h2>{{ isSignUp ? 'Sign up' : 'Log in' }} as a {{ isStudent ? 'student' : 'teacher' }}</h2>
             <div class="logo-wrapper">
                 <img class="google-logo" src="/assets/images/google.png">
             </div>
             <p id="email-instruction" class="form-text text-muted">Or use your email to sign in</p>
             <div class="login-form">
-                <form class="login-form">
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <form class="login-form" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        class="form-input"
+                        id="email"
+                        name="email"
+                        ngModel
+                        #emailInput="ngModel"
+                        aria-describedby="emailHelp"
+                        placeholder="Enter email"
+                        required
+                        email>
+                    <small *ngIf="isSignUp" id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <div *ngIf="emailInput.errors && (emailInput.dirty || emailInput.touched)" class="text-danger">
+                        <small *ngIf="emailInput.errors.required">Email is required.</small>
+                        <small *ngIf="emailInput.errors.email">Please enter a valid email.</small>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-input" id="exampleInputPassword1" placeholder="Password" required>
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        class="form-input"
+                        id="password"
+                        name="password"
+                        ngModel
+                        #passwordInput="ngModel"
+                        placeholder="Password"
+                        required
+                        minlength="6">
+                </div>
+                <div *ngIf="passwordInput.errors && (passwordInput.dirty || passwordInput.touched)" class="text-danger">
+                    <small *ngIf="passwordInput.errors.required">Password is required.</small>
+                    <small *ngIf="passwordInput.errors.minlength">Password must be at least 6 characters long.</small>
                 </div>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1">Remember me</label>
                 </div>
                 <button type="submit" class="login-btn">SIGN IN</button>
-                <div class="sign-up-text">
-                  <small>Don't have an account? </small><small style="font-style: italic; color: #F31559;">Sign up</small><br>
-                  <small>Are you a teacher? </small><small style="font-style: italic; color: #F31559;">Login as teacher</small>
+                <div *ngIf="!isSignUp && isStudent" class="sign-up-text">
+                    <small>Don't have a student account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up</small><br>
+                    <small>Are you a teacher? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as teacher</small>
+                </div>
+                <div *ngIf="isSignUp && isStudent" class="sign-up-text">
+                    <small>Already have a student account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Log in</small><br>
+                    <small>Are you a teacher? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as a teacher</small>
+                </div>
+                <div *ngIf="!isSignUp && !isStudent" class="sign-up-text">
+                    <small>Don't have a teacher account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up</small><br>
+                    <small>Are you a student? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as student</small>
+                </div>
+                <div *ngIf="isSignUp && !isStudent" class="sign-up-text">
+                    <small>Already have a teacher account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Log in</small><br>
+                    <small>Are you a student? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as a student</small>
                 </div>
                 </form>
             </div>

@@ -1,1 +1,10 @@
-<p>header works!</p>
+<nav class="navbar">
+    <div class="logo">Logo</div>
+    <ul class="nav-links" [class.active]="navActive">
+      <li><a routerLink="/courses" routerLinkActive="active">Courses</a></li>
+      <li><a routerLink="/schedule" routerLinkActive="active">Schedule</a></li>
+      <li><a routerLink="/calendar" routerLinkActive="active">Calendar</a></li>
+      <li><a routerLink="/assignments" routerLinkActive="active">Assignments</a></li>
+    </ul>
+    <div class="menu" (click)="toggleNavbar()">Menu</div>
+  </nav>
