@@ -1,0 +1,19 @@
+
+<div class="home-container">
+    
+    <mat-toolbar class="mat-elevation-z3">
+        <button mat-icon-button (click)="toggleNavbar()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <img class="logo" src="../../assets/images/studentology-high-resolution-logo-black-transparent.png">
+    </mat-toolbar>
+    <mat-sidenav-container>
+        <mat-sidenav opened mode="side" [style.width]="sideNavWidth">
+            <app-stud-sidenav [collapsed]="collapsed"></app-stud-sidenav>
+        </mat-sidenav>
+        <mat-sidenav-content class="nav-content" [style.margin-left]="sideNavWidth">
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>
+

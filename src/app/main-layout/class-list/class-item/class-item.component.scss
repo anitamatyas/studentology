@@ -1,0 +1,27 @@
+.class-bg {
+    border-radius: 10px;
+    height: 60%;
+    width: 100%;
+
+    // img {
+    //     height: 100%;
+    //     width: 100%;
+    //     object-fit: cover;
+    // }
+}
+
+.class-name {
+    font-weight: 500;
+    font-size: 1.5em;
+}
+
+.class-owner {
+    font-size: 0.9em;
+    color: var(--darkgray);
+}
+
+.member-count {
+    i {
+        padding-right: .5em;
+    }
+}

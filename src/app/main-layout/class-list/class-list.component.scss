@@ -1,0 +1,42 @@
+@import "../../../styles.scss";
+
+.class-wrapper {
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    gap: 20px; /* Adjust the gap between items */
+    width: 90%; 
+    margin: 0 auto;
+}
+
+app-class-item, .add-item {
+    height: 280px;
+    width: 250px;
+    margin: 10px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, .55);  
+    backdrop-filter: blur(4px);
+    box-shadow: 0px 0px 4px 1px #efcaca;
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    justify-content: flex-start;
+    letter-spacing: -1px;
+
+    @media (max-width: 480px) {
+        height: 280px;
+        width: 250px;
+    }
+
+    &.add-item {
+        font-size: 3em;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+}
+

@@ -1,0 +1,30 @@
+@import "../../styles.scss";
+
+mat-toolbar {
+    // background: linear-gradient(160deg, white, var(--primary-color-red), var(--primary-color-blue), white);
+    position: relative;
+    z-index: 5;
+}
+
+.nav-content {
+    padding: 24px;
+    background-image:  url('../../assets/images/layered-waves-haikei-7.svg');
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-attachment: fixed;
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 64px);
+}
+
+.logo {
+    height: 1.5em;
+    position: absolute;
+    right: .5em;
+}
+
+mat-sidenav, mat-sidenav-content {
+    transition: all 500ms ease-in-out;
+}

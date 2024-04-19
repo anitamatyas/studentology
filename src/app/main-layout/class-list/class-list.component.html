@@ -1,0 +1,15 @@
+<div class="class-wrapper">
+    <div class="add-item">
+        +
+    </div>
+    <app-class-item *ngFor="let class of classList" [class]="class" (click)="navigateToClass(class)">
+
+    </app-class-item>
+        <!-- <div class="class-bg" [style.background]="class.imagePath">
+            <img src={{class.imagePath}}>
+        </div>
+        <div class="class-name">{{class.title}}</div>
+        <div class="class-owner">from {{class.owner}}</div>
+        <div class="member-count"><i class="bi bi-people"></i><span>{{class.members}}</span></div> -->
+
+</div>

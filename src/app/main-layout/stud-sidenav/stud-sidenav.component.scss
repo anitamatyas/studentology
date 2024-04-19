@@ -1,0 +1,33 @@
+
+:host * {
+    transition: all 500ms ease-in-out;
+}
+
+mat-nav-list {
+    text-align: left;
+}
+
+mat-icon {
+    background: linear-gradient(160deg, var(--primary-color-red), var(--primary-color-blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.sidenav-header {
+    margin: 1em auto;
+    text-align: center;
+    overflow: hidden;
+    
+    img {
+        width: 100%; 
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.sidenav-footer {
+    vertical-align: bottom;
+}
