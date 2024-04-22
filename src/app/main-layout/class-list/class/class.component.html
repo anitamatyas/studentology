@@ -1,3 +1,29 @@
-<p>
-  class works!
-</p>
+<div class="class-container">
+  <div class="header">
+    <h1>{{ selectedClass.title }}</h1>
+    <div class="owner">
+      <span> Owner: {{selectedClass.owner}} </span><br>
+      <span> Members: {{selectedClass.members}} </span>
+    </div>
+  </div>
+  <div class="forum-wrapper">
+    <h3>Posts</h3>
+    <div class="post">
+      <h4>New post</h4>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <input type="text" id="postText" [(ngModel)]="postText" name="postText" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!postText">Post</button>
+      </form>
+    </div>
+    <div class="forum-list">
+      <div class="post" *ngFor="let post of posts">
+        <h3>{{ post.user }}</h3>
+        <span>{{ post.content }}</span>
+        <a>{{ post.link }}</a>
+        <span>{{ post.timestamp }}</span>
+      </div>
+    </div>
+  </div>
+</div>

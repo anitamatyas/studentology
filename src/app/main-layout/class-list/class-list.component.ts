@@ -24,7 +24,7 @@ export class ClassListComponent implements OnInit{
 
   navigateToClass(classItem: Class){
     this.classService.selectClass(classItem);
-    this.router.navigate(['home/classes/classView']);
+    this.router.navigate(['home/classView/' + classItem.id]);
   }
 
 }

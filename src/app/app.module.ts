@@ -20,6 +20,8 @@ import { AssignmentsComponent } from './main-layout/assignments/assignments.comp
 import { TestsComponent } from './main-layout/tests/tests.component';
 import { ClassService } from './main-layout/class-list/class.service';
 import { ClassItemComponent } from './main-layout/class-list/class-item/class-item.component';
+import { CommonModule } from '@angular/common';
+import { ClassComponent } from './main-layout/class-list/class/class.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { ClassItemComponent } from './main-layout/class-list/class-item/class-it
     CalendarComponent,
     AssignmentsComponent,
     TestsComponent,
-    ClassItemComponent
+    ClassItemComponent,
+    ClassComponent
   ],
   imports: [
     BrowserModule,

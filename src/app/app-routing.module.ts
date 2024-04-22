@@ -15,18 +15,12 @@ const appRoutes: Routes = [
         path: 'home',
         component: MainLayoutComponent,
         children: [
-            { 
-                path: 'classes',
-                component: ClassListComponent,
-                children: [
-                    {
-                        path: 'classView', component: ClassComponent
-                    }
-                ]},
-            { path: 'assignments', component: AssignmentsComponent },
-            { path: 'calendar', component: CalendarComponent },
-            { path: 'tests', component: TestsComponent },
-            { path: '', redirectTo: 'classes', pathMatch: 'full' }
+                { path: 'classes', component: ClassListComponent},
+                { path: 'classView/:id', component: ClassComponent },
+                { path: 'assignments', component: AssignmentsComponent },
+                { path: 'calendar', component: CalendarComponent },
+                { path: 'tests', component: TestsComponent },
+                { path: '', redirectTo: 'classes', pathMatch: 'full' }
         ]
     }
 ];
