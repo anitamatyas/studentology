@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Class } from '../../models/class.model';
-import { ClassService } from './class.service';
+import { ClassService } from '../../services/class.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,11 +19,12 @@ export class ClassListComponent implements OnInit{
   }
 
   ngOnInit() {
+    //this.classService.storeClasses();
+    this.classService.fetchClasses();
     this.classList = this.classService.getClasses();
   }
 
   navigateToClass(classItem: Class){
-    this.classService.selectClass(classItem);
     this.router.navigate(['home/classView/' + classItem.id]);
   }
 

@@ -1,5 +1,11 @@
+.header {
+    padding: 1em;
+    border-radius: 10px;
+    color: white;
+}
+
 .forum-wrapper {
-    margin: 2em;
+    margin: 2em 0;
     width: 60%;
     border: 1px solid lightgray;
     padding: 3em;
@@ -13,6 +19,12 @@
         display: flex;
         flex-direction: column-reverse;
     }
+
+    @media (max-width:480px) {
+        margin: 10px 0;
+        width: 100%;
+        padding: .8em;
+    }
 }
 
 .post {
@@ -22,6 +34,10 @@
     border: 1px solid gray;
     margin: 2em 0;
     border-radius: 20px;
+
+    @media (max-width:480px) {
+        padding: 1em;
+    }
 }
 
 .btn-primary {

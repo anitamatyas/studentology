@@ -18,10 +18,14 @@ import { StudSidenavComponent } from './main-layout/stud-sidenav/stud-sidenav.co
 import { CalendarComponent } from './main-layout/calendar/calendar.component';
 import { AssignmentsComponent } from './main-layout/assignments/assignments.component';
 import { TestsComponent } from './main-layout/tests/tests.component';
-import { ClassService } from './main-layout/class-list/class.service';
+import { ClassService } from './services/class.service';
 import { ClassItemComponent } from './main-layout/class-list/class-item/class-item.component';
 import { CommonModule } from '@angular/common';
 import { ClassComponent } from './main-layout/class-list/class/class.component';
+import { HttpClientModule } from '@angular/common/http';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,8 @@ import { ClassComponent } from './main-layout/class-list/class/class.component';
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    HttpClientModule
   ],
   providers: [
     provideAnimationsAsync(),
