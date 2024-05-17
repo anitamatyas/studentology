@@ -145,6 +145,23 @@
               "browserTarget": "studentology:build:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "studentology:build:production",
+              "serveTarget": "studentology:serve:production"
+            },
+            "development": {
+              "buildTarget": "studentology:build:development",
+              "serveTarget": "studentology:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

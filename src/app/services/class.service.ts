@@ -3,6 +3,8 @@ import { Class } from "../models/class.model";
 import { Post } from "../models/post.model";
 import { BehaviorSubject, map, switchMap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { Firestore } from "@angular/fire/firestore";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
 
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
 
@@ -27,22 +29,22 @@ export class ClassService {
 
     private selectedClass = new BehaviorSubject<Class | null>(null);
     postsChanged = new EventEmitter<Post[]>();
-
-    private classes: Class[] = [
-        new Class('0', 'Mathematics', 'Introduction to Algebra', 'John Doe', colorPalette[0], 25, [post1, post2]),
-        new Class('1', 'Physics', 'Fundamentals of Mechanics', 'Jane Smith', colorPalette[1], 30, [post3]),
-        new Class('2', 'Chemistry', 'Organic Chemistry Basics', 'Alice Johnson', colorPalette[2], 20, [post1, post2, post3]),
-        new Class('3', 'Biology', 'Marine Biology', 'Bob Brown', colorPalette[3], 22, [post2, post3]),
-        new Class('4', 'History', 'World History Overview', 'Charlie Davis', colorPalette[0], 18, [post1]),
-        new Class('5', 'Geography', 'Geographical Mapping Techniques', 'Daisy Evans', colorPalette[1], 15, [post3]),
-        new Class('6', 'English', 'Advanced English Literature', 'Ethan Ford', colorPalette[2], 28, [post1, post2]),
-        new Class('7', 'Art', 'Modern Art & Techniques', 'Grace Hill', colorPalette[3], 23, [post2, post3])
-    ];
+    private classes = [];
+    // private classes: Class[] = [
+    //     new Class('0', 'Mathematics', 'Introduction to Algebra', 'John Doe', colorPalette[0], 25, [post1, post2]),
+    //     new Class('1', 'Physics', 'Fundamentals of Mechanics', 'Jane Smith', colorPalette[1], 30, [post3]),
+    //     new Class('2', 'Chemistry', 'Organic Chemistry Basics', 'Alice Johnson', colorPalette[2], 20, [post1, post2, post3]),
+    //     new Class('3', 'Biology', 'Marine Biology', 'Bob Brown', colorPalette[3], 22, [post2, post3]),
+    //     new Class('4', 'History', 'World History Overview', 'Charlie Davis', colorPalette[0], 18, [post1]),
+    //     new Class('5', 'Geography', 'Geographical Mapping Techniques', 'Daisy Evans', colorPalette[1], 15, [post3]),
+    //     new Class('6', 'English', 'Advanced English Literature', 'Ethan Ford', colorPalette[2], 28, [post1, post2]),
+    //     new Class('7', 'Art', 'Modern Art & Techniques', 'Grace Hill', colorPalette[3], 23, [post2, post3])
+    // ];
     private classesSubject = new BehaviorSubject<Class[]>([]);
     classes$ = this.classesSubject.asObservable();
     
-    constructor(private http: HttpClient){
-
+    constructor(private http: HttpClient, private firestore: AngularFirestore){
+        
     }
 
     getClassById(id: string){
@@ -55,23 +57,33 @@ export class ClassService {
     }
 
     fetchClasses() {
-        this.http
-            .get<any>('https://studentology-82364-default-rtdb.europe-west1.firebasedatabase.app/classes.json')
-            .subscribe(response => {
-                console.log(response);
-                this.classes = Object.keys(response).map(key => ({
-                    id: key,
-                    ...response[key]
-                }));
-            });
+        return this.firestore.collection('classes').snapshotChanges()
+            .pipe(
+                map(actions => {
+                return actions.map(action => {
+                    const data = action.payload.doc.data() as Class;
+                    const id = action.payload.doc.id;
+                    this.classes.push({ id, ...data });
+                    return { id, ...data };
+                });
+                })
+            );
     }
 
     storeClasses(){
-        this.http
-            .put('https://studentology-82364-default-rtdb.europe-west1.firebasedatabase.app/classes.json', this.classes)
-            .subscribe(response => {
-                console.log(response);
-            });
+        this.classes.forEach(cls => {
+            const postsData = cls.posts.map(post => ({ content: post.content, publisher: post.publisher, createdDate: post.createdDate }));
+            const classData = {
+                id: cls.id,
+                title: cls.title,
+                subTitle: cls.subTitle,
+                owner: cls.owner,
+                imagePath: cls.imagePath,
+                members: cls.members,
+                posts: postsData
+            };
+            this.firestore.collection('classes').add(classData);
+        });
     }
 
     loadPosts(classId: string){

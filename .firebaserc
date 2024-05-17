@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "studentology-82364": {
+      "hosting": {
+        "studentology": [
+          "studentology-82364"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "studentology-82364"
+  }
+}

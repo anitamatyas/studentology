@@ -3,10 +3,16 @@
 .class-wrapper {
     padding: 30px;
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
-    gap: 20px; /* Adjust the gap between items */
+    flex-wrap: wrap;
+    gap: 20px;
     width: 90%; 
     margin: 0 auto;
+
+    @media (max-width: 480px) {
+        width: 100%;
+        padding: 15px;
+        gap: 5px;
+    }
 }
 
 app-class-item, .add-item {
@@ -28,8 +34,9 @@ app-class-item, .add-item {
     letter-spacing: -1px;
 
     @media (max-width: 480px) {
-        height: 280px;
+        height: 230px;
         width: 250px;
+        margin: 5px;
     }
 
     &.add-item {
