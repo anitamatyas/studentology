@@ -1,0 +1,17 @@
+<div class="post">
+  <ng-container *ngIf="publisher$ | async as publisher">
+    <div class="publisher-info">
+      <img [src]="publisher.profilePic" alt="Profile Picture">
+      <h3>{{ publisher.username }}</h3>
+      <span class="published-date">{{ post.createdDate.toDate() | date: 'yyyy MMMM dd' }}</span>
+    </div>
+  </ng-container>
+  <div class="post-content" [innerHTML]="post.content"></div>
+  <hr>
+  <div *ngFor="let comment of (commentsOnPost$ | async)">
+    <p>{{ comment.content }} - {{ comment.userId }}</p>
+    <button (click)="deleteComment(post.id, comment.commentId)">Delete</button>
+  </div>
+  <textarea [(ngModel)]="newCommentText"></textarea>
+  <button (click)="addComment(post.id)">Add Comment</button>
+</div>

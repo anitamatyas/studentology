@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-stud-sidenav',
@@ -9,7 +10,7 @@ export class StudSidenavComponent  implements OnInit {
 
   @Input() collapsed = true;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {}
   navItems: NavItem[] = [
@@ -18,6 +19,10 @@ export class StudSidenavComponent  implements OnInit {
     { icon: 'checklist', label: 'Tests', route: '/home/tests' },
     { icon: 'calendar_month', label: 'Calendar', route: '/home/calendar' }
   ];
+
+  onLogout(){
+    this.authService.logout();
+  }
 }
 
 export interface NavItem {

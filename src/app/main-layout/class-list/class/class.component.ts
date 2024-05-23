@@ -1,70 +1,63 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Class } from '../../../models/class.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Class } from '../../../interfaces/class.interface';
 import { ClassService } from '../../../services/class.service';
 import { ActivatedRoute } from '@angular/router';
-import { Post } from '../../../models/post.model';
+import { Post } from '../../../interfaces/post.interface';
+import { Subscription } from 'rxjs';
+import { PostService } from '../../../services/post.service';
+import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../interfaces/user.interface';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-class',
   templateUrl: './class.component.html',
   styleUrls: ['./class.component.scss'],
 })
-export class ClassComponent  implements OnInit {
+export class ClassComponent  implements OnInit, OnDestroy {
+  posts: Post[] = [];
   selectedClassId: string;
   selectedClass: Class;
+  selectedClassSubscription: Subscription;
   postText: string = '';
+  postsSubscription: Subscription;
+  postsChangedSubscription: Subscription;
+  user: User;
 
-//   posts: Post[] = [
-//     { id: 1, user: 'Alice Johnson', timestamp: new Date('2023-04-21T09:24:00'), content: 'Really excited to start this course!', fileUrl: undefined },
-//     { id: 2, user: 'Bob Brown', timestamp: new Date('2023-04-22T10:15:00'), content: 'Does anyone have the textbook in PDF?', fileUrl: 'https://example.com/textbook.pdf' },
-//     { id: 3, user: 'Charlie Davis', timestamp: new Date('2023-04-23T11:00:00'), content: 'Here’s a great resource I found related to our last lecture.', fileUrl: 'https://example.com/resource.pdf' },
-//     { id: 4, user: 'Daisy Evans', timestamp: new Date('2023-04-23T12:45:00'), content: 'Can someone explain the last experiment in detail?' },
-//     { id: 5, user: 'Ethan Ford', timestamp: new Date('2023-04-24T14:30:00'), content: 'I’m having trouble with the homework problems. Any tips?' },
-//     { id: 6, user: 'Grace Hill', timestamp: new Date('2023-04-25T15:20:00'), content: 'Study group this Friday at the library. Everyone’s welcome!' },
-//     { id: 7, user: 'John Doe', timestamp: new Date('2023-04-26T16:00:00'), content: 'Reminder that the assignment is due next Monday.' },
-//     { id: 8, user: 'Jane Smith', timestamp: new Date('2023-04-27T17:45:00'), content: 'Anyone interested in collaborating on the project?' },
-//     { id: 9, user: 'Alice Johnson', timestamp: new Date('2023-04-28T18:30:00'), content: 'Found an error in the lab manual. I’ve emailed the instructor about it.' },
-//     { id: 10, user: 'Charlie Davis', timestamp: new Date('2023-04-29T19:00:00'), content: 'Check out my latest post on the forum blog about our course topic!', fileUrl: 'https://example.com/blogpost' }
-// ];
-
-posts: Post[] = [];
-
-  constructor(private classService: ClassService, private route: ActivatedRoute) {
-    
-  }
+  constructor(
+    private classService: ClassService,
+    private postService: PostService,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.selectedClassId = this.route.snapshot.paramMap.get('id');
-    this.selectedClass = this.classService.getClassById(this.selectedClassId);
-    this.loadPosts();
-    this.classService.postsChanged
-      .subscribe(
-        (posts: Post[]) => {
-          this.posts = posts;
-        }
-      )
-    console.log(this.selectedClass);
-    
-  }
-
-  loadPosts(): void {
-    this.classService.loadPosts(this.selectedClassId).subscribe(
-      (posts: Post[]) => {
-        this.posts = posts;
-        console.log(this.posts);
-      },
-      (error) => {
-        console.error('Error loading posts:', error);
-      }
-    );
+    this.selectedClassSubscription = this.classService.getClassById(this.selectedClassId).subscribe(cls => {
+      this.selectedClass = cls;
+    });
+    this.postsSubscription = this.postService.getPosts(this.selectedClassId).subscribe(posts => {
+      this.posts = posts;
+    });
+    this.user = this.authService.getSignedInUser();
   }
 
   onSubmit() {
     if (this.postText) {
+      const formattedText = this.formatText(this.postText);
+      this.postService.addPost(this.selectedClassId, formattedText, this.user.id);
       console.log(this.postText);
-      this.classService.addPost(this.selectedClassId, new Post(this.postText, 'Jancsi', new Date()));
       this.postText = '';
-      this.loadPosts();
     }
+  }
+
+  formatText(text: string) {
+    const formattedText = text.replace(/\n/g, '<br>');
+    return formattedText;
+  }
+
+  ngOnDestroy() {
+    if (this.postsSubscription) this.postsSubscription.unsubscribe();
+    if (this.postsChangedSubscription) this.postsChangedSubscription.unsubscribe();
   }
 }

@@ -60,7 +60,13 @@
                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1">Remember me</label>
                 </div>
-                <button type="submit" class="login-btn">SIGN IN</button>
+                <div class="login-error" *ngIf="error">
+                    <p class="text-danger">{{ error }}</p>
+                </div>
+                <button type="submit" class="login-btn" [disabled]="!loginForm.valid || isLoading">
+                    <span *ngIf="isSignUp">SIGN UP</span>
+                    <span *ngIf="!isSignUp">SIGN IN</span>
+                </button>
                 <div *ngIf="!isSignUp && isStudent" class="sign-up-text">
                     <small>Don't have a student account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up</small><br>
                     <small>Are you a teacher? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as teacher</small>

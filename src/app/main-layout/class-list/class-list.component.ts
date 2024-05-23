@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Class } from '../../models/class.model';
+import { Class } from '../../interfaces/class.interface';
 import { ClassService } from '../../services/class.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -21,16 +21,16 @@ export class ClassListComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.classesSubscription = this.classService.fetchClasses().subscribe(classes => {
+    this.classesSubscription = this.classService.getClasses().subscribe(classes => {
       this.classList = classes;
     });
   }
 
   navigateToClass(classItem: Class){
+    console.log('passed class to classItem: ',classItem);
     this.router.navigate(['home/classView/' + classItem.id]);
   }
 
-  //Unsubscribing from all my subscriptions
   ngOnDestroy(){
     this.classesSubscription.unsubscribe();
   }

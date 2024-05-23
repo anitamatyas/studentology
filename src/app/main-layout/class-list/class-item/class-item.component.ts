@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Class } from '../../../models/class.model';
+import { Class } from '../../../interfaces/class.interface';
 
 @Component({
   selector: 'app-class-item',
@@ -12,7 +12,7 @@ export class ClassItemComponent  implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.class)
+    //console.log(this.class)
   }
 
 }

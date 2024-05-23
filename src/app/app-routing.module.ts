@@ -1,19 +1,21 @@
 import { Component, NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { LoginComponent } from "./login/login.component";
+import { AuthComponent } from "./auth/auth.component";
 import { MainLayoutComponent } from "./main-layout/main-layout.component";
 import { ClassListComponent } from "./main-layout/class-list/class-list.component";
 import { AssignmentsComponent } from "./main-layout/assignments/assignments.component";
 import { CalendarComponent } from "./main-layout/calendar/calendar.component";
 import { TestsComponent } from "./main-layout/tests/tests.component";
 import { ClassComponent } from "./main-layout/class-list/class/class.component";
+import { AuthGuard } from "./auth/auth.guard";
 
 const appRoutes: Routes = [
-    { path: 'login', component: LoginComponent },
+    { path: 'auth', component: AuthComponent },
     { path: '', redirectTo: '/home/classes', pathMatch: 'full' },
-    { 
+    {
         path: 'home',
         component: MainLayoutComponent,
+        canActivate: [AuthGuard],
         children: [
                 { path: 'classes', component: ClassListComponent},
                 { path: 'classView/:id', component: ClassComponent },
@@ -22,7 +24,8 @@ const appRoutes: Routes = [
                 { path: 'tests', component: TestsComponent },
                 { path: '', redirectTo: 'classes', pathMatch: 'full' }
         ]
-    }
+    },
+    { path: '**', redirectTo: '/home/classes' }
 ];
 
 @NgModule({

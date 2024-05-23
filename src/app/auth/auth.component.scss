@@ -1,8 +1,8 @@
 .login-container {
     background-image:  url('/assets/images/wave-haikei.svg'), url('/assets/images/blurry-gradient-haikei.svg');
-    background-position: center center; 
-    background-repeat: no-repeat; 
-    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
     background-attachment: fixed;
     display: flex;
     flex-direction: column;
@@ -77,7 +77,7 @@
         font-size: 17px;
         max-width: 80%;
     }
-    
+
 }
 
 h2 {
@@ -129,6 +129,10 @@ h2 {
 }
 
 .login-btn {
+    height: 2.3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-image: linear-gradient(to right, var(--primary-color-red), var(--primary-color-blue));
     color: white;
     padding: 10px 20px;
@@ -137,7 +141,6 @@ h2 {
     cursor: pointer;
     font-size: 16px;
     font-weight: 400;
-    display: flex;
     margin: 0 auto;
     padding-inline: 4em;
     margin-top: .5em;
@@ -222,7 +225,7 @@ h2 {
     border: none;
     border-radius: 8px;
     letter-spacing: 1px;
-    
+
 }
 
 input::placeholder {
@@ -233,4 +236,10 @@ input::placeholder {
 
 .text-danger {
     color: var(--primary-color-red);
+}
+
+.login-error {
+    p {
+        margin: 0;
+    }
 }

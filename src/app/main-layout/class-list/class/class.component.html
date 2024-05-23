@@ -1,29 +1,25 @@
 <div class="class-container">
-  <div class="header" [ngStyle]="{background: selectedClass.imagePath}">
-    <h1>{{ selectedClass.title }}</h1>
-    <div class="owner">
-      <span> Owner: {{selectedClass.owner}} </span><br>
-      <span> Members: {{selectedClass.members}} </span><br>
-      <!-- <button class="btn btn-success" (click)="loadPosts()">Load posts</button> -->
-    </div>
-  </div>
-  <div class="forum-wrapper">
-    <h3>Posts</h3>
-    <div class="post">
-      <h4>New post</h4>
-      <form (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <input type="text" id="postText" [(ngModel)]="postText" name="postText" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!postText">Post</button>
-      </form>
-    </div>
-    <div class="forum-list">
-      <div class="post" *ngFor="let post of posts">
-        <h3>{{ post.publisher }}</h3>
-        <span>{{ post.content }}</span>
-        <span>Date: {{ post.createdDate  | date:'yyyy-MM-dd' }}</span>
+  <ng-container *ngIf="selectedClass">
+    <div class="header" [ngStyle]="{background: selectedClass.imagePath}">
+      <h1>{{ selectedClass.title }}</h1>
+      <div class="owner">
+        <span> Owner: {{selectedClass.owner}} </span><br>
+        <span> Members: {{selectedClass.members}} </span><br>
       </div>
     </div>
-  </div>
+    <div class="forum-wrapper">
+      <h3>Posts</h3>
+      <div class="post">
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <textarea id="postText" [(ngModel)]="postText" name="postText" class="form-control" placeholder="Write a post here" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!postText">Post</button>
+        </form>
+      </div>
+      <div class="forum-list">
+        <app-post *ngFor="let post of posts" [post]="post"></app-post>
+      </div>
+    </div>
+  </ng-container>
 </div>

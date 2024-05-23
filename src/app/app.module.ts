@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './login/login.component';
+import { AuthComponent } from './auth/auth.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -20,28 +19,29 @@ import { AssignmentsComponent } from './main-layout/assignments/assignments.comp
 import { TestsComponent } from './main-layout/tests/tests.component';
 import { ClassService } from './services/class.service';
 import { ClassItemComponent } from './main-layout/class-list/class-item/class-item.component';
-import { CommonModule } from '@angular/common';
 import { ClassComponent } from './main-layout/class-list/class/class.component';
 import { HttpClientModule } from '@angular/common/http';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat'
 import { environment } from '../environments/environment';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { PostComponent } from './main-layout/class-list/class/post/post.component';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
   declarations: [
     AppComponent,
     ClassListComponent,
-    HeaderComponent,
-    LoginComponent,
+    AuthComponent,
     MainLayoutComponent,
     StudSidenavComponent,
     CalendarComponent,
     AssignmentsComponent,
     TestsComponent,
     ClassItemComponent,
-    ClassComponent
+    ClassComponent,
+    LoadingSpinnerComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,
@@ -55,8 +55,8 @@ import { environment } from '../environments/environment';
     MatListModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
+    AngularFirestoreModule,
+    AngularFireAuthModule,
   ],
   providers: [
     provideAnimationsAsync(),
