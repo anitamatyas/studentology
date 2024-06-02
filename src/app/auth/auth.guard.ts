@@ -14,7 +14,6 @@ export class AuthGuard {
             map(user => {
             const isAuth = !!user;
             if (isAuth && state.url.includes('/auth')) {
-                console.log('here');
                 this.authService.logout();
                 return this.router.createUrlTree(['/auth']);
             }

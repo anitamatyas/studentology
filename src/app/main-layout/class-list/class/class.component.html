@@ -1,9 +1,9 @@
 <div class="class-container">
-  <ng-container *ngIf="selectedClass">
+  <ng-container *ngIf="selectedClass && classOwner">
     <div class="header" [ngStyle]="{background: selectedClass.imagePath}">
       <h1>{{ selectedClass.title }}</h1>
       <div class="owner">
-        <span> Teacher: {{selectedClass.owner}} </span><br>
+        <span> Teacher: {{classOwner.username}} </span><br>
         <span> Class code: {{selectedClass.classCode}} </span><br>
       </div>
     </div>

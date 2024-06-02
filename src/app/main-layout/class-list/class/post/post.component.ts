@@ -24,7 +24,6 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     this.publisher$ = this.userService.getUserById(this.post.publisherId);
     this.commentsOnPost$ = this.postService.getComments(this.post.id);
-    console.log(this.post.id);
     this.commentsOnPost$ = this.postService.getComments(this.post.id).pipe(
       switchMap(comments => {
         if (comments.length === 0) return of([]);

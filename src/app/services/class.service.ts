@@ -103,6 +103,15 @@ export class ClassService {
         );
     }
 
+    getClassMembersLength(classId: string): Observable<number> {
+        return this.firestore
+            .collection(`classes/${classId}/members`)
+            .snapshotChanges()
+            .pipe(
+                map(actions => actions.length)
+            );
+    }
+
     getClassById(classId: string): Observable<Class> {
         return this.firestore.doc<Class>(`classes/${classId}`).snapshotChanges().pipe(
             map(result => convertSnap<Class>(result))
