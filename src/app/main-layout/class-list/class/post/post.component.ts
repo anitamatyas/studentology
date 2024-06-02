@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, map, of, switchMap } from 'rxjs';
 import { Post, PostComment } from '../../../../interfaces/post.interface';
 import { User } from '../../../../interfaces/user.interface';
 import { UserService } from '../../../../services/user.service';
 import { Timestamp } from 'firebase/firestore';
 import { PostService } from '../../../../services/post.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-post',
@@ -16,29 +17,37 @@ export class PostComponent implements OnInit {
   publisher$: Observable<User>;
   commentsOnPost$: Observable<PostComment[]>;
   newCommentText: string = '';
+  loggedInUser: User;
 
-  constructor(private userService: UserService, private postService: PostService) {}
+  constructor(private userService: UserService, private postService: PostService, private authService: AuthService) {}
 
   ngOnInit() {
     this.publisher$ = this.userService.getUserById(this.post.publisherId);
     this.commentsOnPost$ = this.postService.getComments(this.post.id);
     console.log(this.post.id);
-    this.commentsOnPost$.subscribe(comments => {
-      console.log(comments);
-    })
+    this.commentsOnPost$ = this.postService.getComments(this.post.id).pipe(
+      switchMap(comments => {
+        if (comments.length === 0) return of([]);
+        const commentsWithUsers$ = comments.map(comment =>
+          this.userService.getUserById(comment.userId).pipe(
+            map(user => ({
+              ...comment,
+              user
+            }))
+          )
+        );
+        return combineLatest(commentsWithUsers$);
+      })
+    );
+    this.loggedInUser = this.authService.getSignedInUser();
   }
 
   addComment(postId: string) {
-    // if (this.newCommentText) {
-    //   const comment: PostComment = {
-    //     id: '',
-    //     content: this.newCommentText,
-    //     userId: 'currentUserId'
-    //   };
-    //   this.postService.addComment(postId, comment).then(() => {
-    //     this.newCommentText = '';
-    //   });
-    // }
+    if (this.newCommentText) {
+      this.postService.addComment(this.loggedInUser.id, postId, this.newCommentText).then(() => {
+        this.newCommentText = '';
+      });
+    }
   }
 
   deleteComment(postId: string, commentId: string) {

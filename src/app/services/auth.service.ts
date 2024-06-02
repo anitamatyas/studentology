@@ -38,7 +38,7 @@ export class AuthService implements OnInit, OnDestroy{
                             email: user.email,
                             username: username,
                             createdDate: new Date().toISOString(),
-                            role: 'user',
+                            role: role,
                             token: token,
                             profilePic: profilePic
                         };

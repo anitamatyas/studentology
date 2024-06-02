@@ -27,6 +27,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { PostComponent } from './main-layout/class-list/class/post/post.component';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     MatIconModule,
     MatSidenavModule,
     MatListModule,
+    MatTabsModule,
+    MatTableModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

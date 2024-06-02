@@ -1,11 +1,11 @@
 @import "../../../styles.scss";
 
 .class-wrapper {
-    padding: 30px;
+
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    width: 90%; 
+    width: 90%;
     margin: 0 auto;
 
     @media (max-width: 480px) {
@@ -20,7 +20,7 @@ app-class-item, .add-item {
     width: 250px;
     margin: 10px;
     padding: 20px;
-    background-color: rgba(255, 255, 255, .55);  
+    background-color: rgba(255, 255, 255, .55);
     backdrop-filter: blur(4px);
     box-shadow: 0px 0px 4px 1px #efcaca;
     border: 1px solid var(--lightgray);
@@ -47,3 +47,23 @@ app-class-item, .add-item {
     }
 }
 
+.button-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    gap: 2em;
+    margin: 2em;
+    flex-wrap: wrap;
+
+    .join-btn {
+        width: 15em;
+        padding: 0.5em 1em;
+        background-color: rgba(255, 255, 255, 0.55);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        box-shadow: 0px 0px 4px 1px #efcaca;
+        border: 1px solid var(--lightgray);
+        border-radius: 10px;
+    }
+}

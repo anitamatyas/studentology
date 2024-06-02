@@ -4,6 +4,8 @@ import { ClassService } from '../../services/class.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../interfaces/user.interface';
 
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
 
@@ -14,9 +16,11 @@ const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
 })
 export class ClassListComponent implements OnInit{
   classList: Class[];
-  private classesSubscription: Subscription;
+  classesSubscription: Subscription;
+  signedInUser: User;
 
-  constructor(private classService: ClassService, private router: Router, private firestore: AngularFirestore) {
+
+  constructor(private classService: ClassService, private router: Router, private firestore: AngularFirestore, private authService: AuthService) {
 
   }
 
@@ -24,6 +28,7 @@ export class ClassListComponent implements OnInit{
     this.classesSubscription = this.classService.getClasses().subscribe(classes => {
       this.classList = classes;
     });
+    this.signedInUser = this.authService.getSignedInUser();
   }
 
   navigateToClass(classItem: Class){

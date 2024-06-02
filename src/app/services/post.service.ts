@@ -5,6 +5,7 @@ import { map } from "rxjs/operators";
 import { PostComment, Post } from "../interfaces/post.interface";
 import { convertSnaps } from "./db-utils";
 import { Timestamp } from "@angular/fire/firestore";
+import { User } from "../interfaces/user.interface";
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -42,26 +43,26 @@ export class PostService {
             });
     }
 
-    addComment(postId: string, userId: string, comment: string){
-        // const commentRef = this.firestore.collection(`posts/${postId}/comments`).doc();
-        // const commentId = commentRef.ref.id;
-        // const nowInSeconds = Math.ceil(Date.now() / 1000);
-        // const newTimestamp = new Timestamp(nowInSeconds, 0);
-        // const newComment: Comment = {
-        //     id: commentId,
-        //     userId,
-        //     comment,
-        //     commentedDate: newTimestamp,
-        // };
+    addComment(userId: string,postId: string, commentText: string){
+        const commentRef = this.firestore.collection(`posts/${postId}/comments`).doc();
+        const commentId = commentRef.ref.id;
+        const nowInSeconds = Math.ceil(Date.now() / 1000);
+        const newTimestamp = new Timestamp(nowInSeconds, 0);
+        const newComment: PostComment = {
+            id: commentId,
+            userId,
+            content: commentText,
+            commentedDate: newTimestamp,
+        };
 
-        // return commentRef.set(newComment);
+        return commentRef.set(newComment);
     }
 
     getComments(postId: string): Observable<PostComment[]> {
         return this.firestore
             .collection('posts')
             .doc(postId)
-            .collection<PostComment>('comments')
+            .collection<PostComment>('comments', ref => ref.orderBy('commentedDate'))
             .snapshotChanges()
             .pipe(
                 map(actions =>

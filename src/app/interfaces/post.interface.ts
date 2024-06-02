@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { User } from './user.interface';
 
 export interface Post {
     id: string;
@@ -13,4 +14,5 @@ export interface PostComment {
     userId: string;
     content: string;
     commentedDate?: Timestamp;
+    user?: User;
 }

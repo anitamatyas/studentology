@@ -3,23 +3,54 @@
     <div class="header" [ngStyle]="{background: selectedClass.imagePath}">
       <h1>{{ selectedClass.title }}</h1>
       <div class="owner">
-        <span> Owner: {{selectedClass.owner}} </span><br>
-        <span> Members: {{selectedClass.members}} </span><br>
+        <span> Teacher: {{selectedClass.owner}} </span><br>
+        <span> Class code: {{selectedClass.classCode}} </span><br>
       </div>
     </div>
-    <div class="forum-wrapper">
-      <h3>Posts</h3>
-      <div class="post">
-        <form (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <textarea id="postText" [(ngModel)]="postText" name="postText" class="form-control" placeholder="Write a post here" rows="3"></textarea>
+    <div class="left-container">
+      <mat-tab-group>
+        <mat-tab label="POSTS">
+          <div class="post-wrapper">
+            <div class="post">
+              <form (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                  <textarea id="postText" [(ngModel)]="postText" name="postText" class="form-control"
+                    placeholder="Write a post here" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" [disabled]="!postText">Post</button>
+              </form>
+            </div>
+            <div class="forum-list">
+              <app-post *ngFor="let post of posts" [post]="post"></app-post>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary" [disabled]="!postText">Post</button>
-        </form>
-      </div>
-      <div class="forum-list">
-        <app-post *ngFor="let post of posts" [post]="post"></app-post>
-      </div>
+        </mat-tab>
+        <mat-tab label="MEMBERS">
+          <table mat-table [dataSource]="classMembers" class="mat-elevation-z8">
+
+            <!-- Profile Column -->
+            <ng-container matColumnDef="profile">
+              <th mat-header-cell *matHeaderCellDef> Profile </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="element.users && element.users.length > 0">
+                  <img [src]="element.users[0]?.profilePic" alt="Profile Picture" class="profile-pic">
+                  {{element.users[0]?.username}}
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <!-- Member Role Column -->
+            <ng-container matColumnDef="memberRole">
+              <th mat-header-cell *matHeaderCellDef> Member Role </th>
+              <td mat-cell *matCellDef="let element"> {{element.memberRole}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-tab>
+      </mat-tab-group>
+
     </div>
   </ng-container>
 </div>

@@ -1,17 +1,32 @@
 <div class="post">
-  <ng-container *ngIf="publisher$ | async as publisher">
-    <div class="publisher-info">
-      <img [src]="publisher.profilePic" alt="Profile Picture">
-      <h3>{{ publisher.username }}</h3>
-      <span class="published-date">{{ post.createdDate.toDate() | date: 'yyyy MMMM dd' }}</span>
-    </div>
-  </ng-container>
-  <div class="post-content" [innerHTML]="post.content"></div>
-  <hr>
-  <div *ngFor="let comment of (commentsOnPost$ | async)">
-    <p>{{ comment.content }} - {{ comment.userId }}</p>
-    <button (click)="deleteComment(post.id, comment.commentId)">Delete</button>
+  <div class="upper-container">
+    <ng-container *ngIf="publisher$ | async as publisher">
+      <div class="publisher-info">
+        <img [src]="publisher.profilePic" alt="Profile Picture">
+        <h3>{{ publisher.username }}</h3>
+        <span class="published-date">{{ post.createdDate.toDate() | date: 'yyyy MMMM dd hh:mm' }}</span>
+      </div>
+    </ng-container>
+    <div class="post-content" [innerHTML]="post.content"></div>
   </div>
-  <textarea [(ngModel)]="newCommentText"></textarea>
-  <button (click)="addComment(post.id)">Add Comment</button>
+  <hr *ngIf="(commentsOnPost$ | async)?.length > 0">
+  <div *ngFor="let comment of (commentsOnPost$ | async)">
+    <div class="comment-wrapper">
+      <div class="commenter-info">
+        <img class="comment-profile-pic" [src]="comment.user.profilePic" alt="Profile Picture">
+        <p>{{ comment.user.username }}</p>
+        <div class="commented-date">
+          <span>{{ comment.commentedDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
+          <i class="material-icons">delete</i>
+        </div>
+      </div>
+      <p>{{ comment.content }}</p>
+    </div>
+  </div>
+  <hr>
+  <div class="new-comment-wrapper">
+    <img class="comment-profile-pic" [src]="loggedInUser.profilePic" alt="Profile Picture">
+    <input class="comment-input" placeholder="Add comment" [(ngModel)]="newCommentText">
+    <div class="add-comment-btn" (click)="addComment(post.id)"><i class="material-icons">send</i></div>
+  </div>
 </div>

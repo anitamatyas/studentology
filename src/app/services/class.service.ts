@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { Class } from "../interfaces/class.interface";
+import { Class, Member } from "../interfaces/class.interface";
 import { Post } from "../interfaces/post.interface";
 import { BehaviorSubject, Observable, catchError, exhaustMap, from, map, switchMap, take, throwError } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -87,6 +87,19 @@ export class ClassService {
     getClasses(): Observable<Class[]> {
         return this.firestore.collection('classes').snapshotChanges().pipe(
             map(result => convertSnaps<Class>(result))
+        );
+    }
+
+    getClassMembers(classId: string): Observable<Member[]> {
+    return this.firestore
+        .collection(`classes/${classId}/members`)
+        .snapshotChanges()
+        .pipe(
+        map(actions => actions.map(a => {
+            const data = a.payload.doc.data() as Member;
+            const id = a.payload.doc.id;
+            return { id, ...data };
+        }))
         );
     }
 

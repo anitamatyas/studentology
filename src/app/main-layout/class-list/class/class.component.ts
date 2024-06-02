@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Class } from '../../../interfaces/class.interface';
+import { Class, Member } from '../../../interfaces/class.interface';
 import { ClassService } from '../../../services/class.service';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../../interfaces/post.interface';
@@ -8,6 +8,7 @@ import { PostService } from '../../../services/post.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../interfaces/user.interface';
 import { UserService } from '../../../services/user.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-class',
@@ -21,14 +22,19 @@ export class ClassComponent  implements OnInit, OnDestroy {
   selectedClassSubscription: Subscription;
   postText: string = '';
   postsSubscription: Subscription;
-  postsChangedSubscription: Subscription;
   user: User;
+  classMembers: Member[] = [];
+  classMembersAsUsers: User[] = [];
+  classMemberSubscription: Subscription;
+  displayedColumns: string[] = ['profile', 'memberRole'];
+  dataSource: MatTableDataSource<Member>;
 
   constructor(
     private classService: ClassService,
     private postService: PostService,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -40,6 +46,16 @@ export class ClassComponent  implements OnInit, OnDestroy {
       this.posts = posts;
     });
     this.user = this.authService.getSignedInUser();
+    this.classMemberSubscription = this.classService.getClassMembers(this.selectedClassId).subscribe(members => {
+      this.classMembers = members;
+      console.log(this.classMembers);
+      this.classMembers.forEach(member => {
+        this.userService.getUserById(member.userId).subscribe(user => {
+          member.users = [user];
+          this.dataSource = new MatTableDataSource(this.classMembers.sort((a, b) => b.memberRole.localeCompare(a.memberRole)));
+        });
+      });
+    })
   }
 
   onSubmit() {
@@ -58,6 +74,5 @@ export class ClassComponent  implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.postsSubscription) this.postsSubscription.unsubscribe();
-    if (this.postsChangedSubscription) this.postsChangedSubscription.unsubscribe();
   }
 }
