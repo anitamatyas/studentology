@@ -32,6 +32,8 @@ import {MatTableModule} from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CreateTestDialogComponent } from './main-layout/dropdowns/create-test-dialog/create-test-dialog.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { CreateTestDialogComponent } from './main-layout/dropdowns/create-test-d
     MatTableModule,
     MatMenuModule,
     MatDialogModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
