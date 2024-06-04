@@ -34,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CreateTestDialogComponent } from './main-layout/dropdowns/create-test-dialog/create-test-dialog.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { ProfileSettingsComponent } from './main-layout/profile-settings/profile-settings.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     ClassComponent,
     LoadingSpinnerComponent,
     PostComponent,
-    CreateTestDialogComponent
+    CreateTestDialogComponent,
+    ProfileSettingsComponent
   ],
   imports: [
     BrowserModule,

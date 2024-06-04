@@ -17,7 +17,8 @@ export class StudSidenavComponent  implements OnInit {
     { icon: 'home', label: 'Classes', route: '/home/classes' },
     { icon: 'library_books', label: 'Assignments', route: '/home/assignments' },
     { icon: 'checklist', label: 'Tests', route: '/home/tests' },
-    { icon: 'calendar_month', label: 'Calendar', route: '/home/calendar' }
+    { icon: 'calendar_month', label: 'Calendar', route: '/home/calendar' },
+    { icon: 'settings', label: 'Settings', route: '/home/settings' },
   ];
 
   onLogout(){

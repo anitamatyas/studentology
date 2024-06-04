@@ -8,6 +8,7 @@ import { CalendarComponent } from "./main-layout/calendar/calendar.component";
 import { TestsComponent } from "./main-layout/tests/tests.component";
 import { ClassComponent } from "./main-layout/class-list/class/class.component";
 import { AuthGuard } from "./auth/auth.guard";
+import { ProfileSettingsComponent } from "./main-layout/profile-settings/profile-settings.component";
 
 const appRoutes: Routes = [
     { path: 'auth', component: AuthComponent },
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
                 { path: 'assignments', component: AssignmentsComponent },
                 { path: 'calendar', component: CalendarComponent },
                 { path: 'tests', component: TestsComponent },
+                { path: 'settings', component: ProfileSettingsComponent },
                 { path: '', redirectTo: 'classes', pathMatch: 'full' }
         ]
     },
