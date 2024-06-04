@@ -29,6 +29,9 @@ import { PostComponent } from './main-layout/class-list/class/post/post.componen
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CreateTestDialogComponent } from './main-layout/dropdowns/create-test-dialog/create-test-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,8 @@ import {MatTableModule} from '@angular/material/table';
     ClassItemComponent,
     ClassComponent,
     LoadingSpinnerComponent,
-    PostComponent
+    PostComponent,
+    CreateTestDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,8 @@ import {MatTableModule} from '@angular/material/table';
     MatListModule,
     MatTabsModule,
     MatTableModule,
+    MatMenuModule,
+    MatDialogModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

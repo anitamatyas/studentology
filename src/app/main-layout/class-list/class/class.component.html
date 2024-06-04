@@ -17,7 +17,14 @@
                   <textarea id="postText" [(ngModel)]="postText" name="postText" class="form-control"
                     placeholder="Write a post here" rows="3"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" [disabled]="!postText">Post</button>
+                <div class="button-container">
+                  <button type="submit" mat-flat-button color="primary" [disabled]="!postText">Post</button>
+                  <button mat-button [matMenuTriggerFor]="menu">Add new</button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item>Assignment</button>
+                      <button mat-menu-item (click)="openCreateTestDialog()">Test</button>
+                    </mat-menu>
+                </div>
               </form>
             </div>
             <div class="forum-list">

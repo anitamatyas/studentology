@@ -18,3 +18,9 @@ export interface Member {
     memberRole: string;
     users?: User[];
 }
+
+export interface Group {
+    id: string;
+    name: string;
+    members: Member[];
+}

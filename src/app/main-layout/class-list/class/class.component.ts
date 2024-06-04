@@ -9,6 +9,8 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../interfaces/user.interface';
 import { UserService } from '../../../services/user.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateTestDialogComponent } from '../../dropdowns/create-test-dialog/create-test-dialog.component';
 
 @Component({
   selector: 'app-class',
@@ -35,7 +37,8 @@ export class ClassComponent  implements OnInit, OnDestroy {
     private postService: PostService,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -76,6 +79,16 @@ export class ClassComponent  implements OnInit, OnDestroy {
   formatText(text: string) {
     const formattedText = text.replace(/\n/g, '<br>');
     return formattedText;
+  }
+
+  openCreateTestDialog(): void {
+    const dialogRef = this.dialog.open(CreateTestDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log('Test created:', result);
+      // db save
+    });
   }
 
   ngOnDestroy() {

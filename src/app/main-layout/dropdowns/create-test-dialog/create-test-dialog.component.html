@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Create Test</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="Title" [(ngModel)]="title">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" placeholder="Due Date" [(ngModel)]="dueDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <!-- Add dropdown for selecting group -->
+  <!-- Add form fields for questions and answers -->
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button color="primary" [mat-dialog-close]="{title: title, dueDate: dueDate}">Create</button>
+</div>
