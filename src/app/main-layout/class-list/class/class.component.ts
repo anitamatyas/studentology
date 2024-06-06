@@ -82,7 +82,11 @@ export class ClassComponent  implements OnInit, OnDestroy {
   }
 
   openCreateTestDialog(): void {
-    const dialogRef = this.dialog.open(CreateTestDialogComponent);
+    const dialogRef = this.dialog.open(CreateTestDialogComponent, {
+      width: '50%',
+      height: '70%',
+      data: {}
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');

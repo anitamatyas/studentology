@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -7,15 +8,54 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./create-test-dialog.component.scss'],
 })
 export class CreateTestDialogComponent  implements OnInit {
-  title: string;
-  dueDate: Date;
+  testForm: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<CreateTestDialogComponent>) { }
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<CreateTestDialogComponent>
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this.testForm = this.fb.group({
+      title: ['', Validators.required],
+      dueDate: ['', Validators.required],
+      questions: this.fb.array([this.createQuestion()])
+    });
+  }
 
-  onCancelClick(): void {
-    this.dialogRef.close();
+  get questions(): FormArray {
+    return this.testForm.get('questions') as FormArray;
+  }
+
+  createQuestion(): FormGroup {
+    return this.fb.group({
+      question: ['', Validators.required],
+      answers: this.fb.array([this.createAnswer()])
+    });
+  }
+
+  createAnswer(): FormGroup {
+    return this.fb.group({
+      answer: ['', Validators.required]
+    });
+  }
+
+  addQuestion(): void {
+    this.questions.push(this.createQuestion());
+  }
+
+  addAnswer(questionIndex: number): void {
+    this.getAnswers(questionIndex).push(this.createAnswer());
+  }
+
+  getAnswers(questionIndex: number): FormArray {
+    return this.questions.at(questionIndex).get('answers') as FormArray;
+  }
+
+  onSubmit(): void {
+    if (this.testForm.valid) {
+      this.dialogRef.close(this.testForm.value);
+    }
   }
 
 }
