@@ -33,15 +33,18 @@
     }
 }
 
-.color-picker {
-    display: flex;
-    flex-direction: row;
-    gap: 2em;
+.theme-wrapper {
+    .theme-picker {
+        margin-top: 1em;
+        display: flex;
+        gap: 2em;
+        flex-direction: row;
+    }
 
-    .color{
+    .theme-selector {
         width: 2em;
         height: 2em;
-        border: 1px solid black;
         border-radius: 50%;
+        cursor: pointer;
     }
 }
