@@ -35,6 +35,13 @@ import { CreateTestDialogComponent } from './main-layout/dropdowns/create-test-d
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ProfileSettingsComponent } from './main-layout/profile-settings/profile-settings.component';
+import {FloatLabelType} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -57,6 +64,7 @@ import { ProfileSettingsComponent } from './main-layout/profile-settings/profile
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     MatToolbarModule,
     MatButtonModule,
@@ -70,6 +78,13 @@ import { ProfileSettingsComponent } from './main-layout/profile-settings/profile
     MatFormFieldModule,
     MatDatepickerModule,
     HttpClientModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatIconModule,
+    MatNativeDateModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
