@@ -83,6 +83,24 @@ app-post {
     text-align: center;
 }
 
-button {
-    padding: 1.5em !important;
+.group-name {
+    font-size: 1.3em;
+    font-weight: 400;
+    .mat-icon {
+        font-size: 20px;
+    }
+}
+
+.members-table {
+    margin: 2em 0;
+}
+
+td {
+    position: relative;
+}
+
+.member-options-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
 }

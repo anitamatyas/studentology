@@ -1,12 +1,15 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { Class, Member } from "../interfaces/class.interface";
+import { Class, Group, Member } from "../interfaces/class.interface";
 import { Post } from "../interfaces/post.interface";
-import { BehaviorSubject, Observable, catchError, exhaustMap, from, map, switchMap, take, throwError } from "rxjs";
+import { BehaviorSubject, Observable, catchError, combineLatest, exhaustMap, from, map, switchMap, take, throwError } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Firestore } from "@angular/fire/firestore";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { AuthService } from "./auth.service";
 import { convertSnap, convertSnaps } from "./db-utils";
+import { UserService } from "./user.service";
+import firebase from 'firebase/compat/app';
+import { DialogService } from "./dialog.service";
 
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
 function getRandomColor(): string {
@@ -14,74 +17,13 @@ function getRandomColor(): string {
     return colorPalette[randomIndex];
 }
 
-// const dummyClasses = [
-//     {
-//         id: 'class1',
-//         title: 'Mathematics',
-//         subTitle: 'Introduction to Algebra',
-//         owner: 'Alice',
-//         imagePath: getRandomColor(),
-//         members: ['Alice', 'Bob', 'Charlie'],
-//         posts: [
-//             { content: 'Hello, welcome to the Mathematics class!', publisher: 'Alice', createdDate: new Date() },
-//             { content: 'Does anyone have the solution to exercise 3?', publisher: 'Bob', createdDate: new Date() }
-//         ]
-//     },
-//     {
-//         id: 'class2',
-//         title: 'History',
-//         subTitle: 'World War II',
-//         owner: 'Bob',
-//         imagePath: getRandomColor(),
-//         members: ['Bob', 'Daisy', 'Ethan'],
-//         posts: [
-//             { content: 'Today we will learn about the Battle of Stalingrad.', publisher: 'Bob', createdDate: new Date() },
-//             { content: 'Who is presenting next week?', publisher: 'Daisy', createdDate: new Date() }
-//         ]
-//     },
-//     {
-//         id: 'class3',
-//         title: 'Physics',
-//         subTitle: 'Introduction to Mechanics',
-//         owner: 'Charlie',
-//         imagePath: getRandomColor(),
-//         members: ['Charlie', 'Ethan', 'Grace'],
-//         posts: [
-//             { content: 'Reminder: Quiz on Friday!', publisher: 'Charlie', createdDate: new Date() },
-//             { content: 'Where can I find additional practice problems?', publisher: 'Ethan', createdDate: new Date() }
-//         ]
-//     },
-//     {
-//         id: 'class4',
-//         title: 'Computer Science',
-//         subTitle: 'Data Structures and Algorithms',
-//         owner: 'Daisy',
-//         imagePath: getRandomColor(),
-//         members: ['Daisy', 'Frank', 'Grace'],
-//         posts: [
-//             { content: 'Welcome to the Computer Science class!', publisher: 'Daisy', createdDate: new Date() },
-//             { content: 'Does anyone have the solution to problem 5?', publisher: 'Frank', createdDate: new Date() }
-//         ]
-//     },
-//     {
-//         id: 'class5',
-//         title: 'Biology',
-//         subTitle: 'Cell Biology',
-//         owner: 'Ethan',
-//         imagePath: getRandomColor(),
-//         members: ['Ethan', 'Alice', 'Bob'],
-//         posts: [
-//             { content: 'Today we will discuss cell structures.', publisher: 'Ethan', createdDate: new Date() },
-//             { content: 'How do organelles function?', publisher: 'Alice', createdDate: new Date() }
-//         ]
-//     },
-//     // Add more classes as needed...
-// ];
 @Injectable()
 export class ClassService {
 
     constructor(
-        private firestore: AngularFirestore
+        private firestore: AngularFirestore,
+        private userService: UserService,
+        private dialogService: DialogService,
     ) { }
 
     getClasses(): Observable<Class[]> {
@@ -91,16 +33,102 @@ export class ClassService {
     }
 
     getClassMembers(classId: string): Observable<Member[]> {
-    return this.firestore
-        .collection(`classes/${classId}/members`)
-        .snapshotChanges()
-        .pipe(
-        map(actions => actions.map(a => {
-            const data = a.payload.doc.data() as Member;
-            const id = a.payload.doc.id;
-            return { id, ...data };
-        }))
+        return this.firestore
+            .collection(`classes/${classId}/members`)
+            .snapshotChanges()
+            .pipe(
+                map(actions => actions.map(a => {
+                    const data = a.payload.doc.data() as Member;
+                    const id = a.payload.doc.id;
+                    return { id, ...data };
+                }))
+            );
+    }
+
+    addMemberToClassAndGroup(classId: string, userId: string, groupId: string): Observable<void> {
+        const classDoc = this.firestore.doc(`classes/${classId}`);
+        const membersCollection = classDoc.collection('members');
+
+        console.log('Adding member!!!');
+
+        // Check if the user is already a member
+        const memberQuery = membersCollection.ref.where('userId', '==', userId).limit(1);
+
+        return from(memberQuery.get()).pipe(
+            switchMap(snapshot => {
+                if (!snapshot.empty) {
+                    // User is already a member
+                    return throwError(new Error('User is already a member of this class.'));
+                } else {
+                    // User is not a member, proceed with adding the member
+                    const newMember = {
+                        userId: userId,
+                        memberRole: 'student',
+                        groupId: groupId
+                    };
+
+                    const memberRef = membersCollection.doc();
+                    const memberId = memberRef.ref.id;
+
+                    return from(memberRef.set(newMember).then(() => {
+                        if (groupId !== 'ungrouped') {
+                            const groupsCollection = classDoc.collection('groups');
+                            const groupDoc = groupsCollection.doc(groupId);
+                            return groupDoc.update({
+                                members: firebase.firestore.FieldValue.arrayUnion(memberId)
+                            });
+                        }
+                        return Promise.resolve();
+                    }));
+                }
+            }),
+            catchError(error => {
+                return throwError(error);
+            })
         );
+    }
+
+    getClassMembersWithUserDetails(classId: string): Observable<Member[]> {
+        return this.getClassMembers(classId).pipe(
+            switchMap(members => {
+                const userObservables = members.map(member =>
+                    this.userService.getUserById(member.userId).pipe(
+                        map(user => ({ ...member, user }))
+                    )
+                );
+                return combineLatest(userObservables);
+            })
+        );
+    }
+
+    ungroupMember(memberId: string, classId: string): Promise<void> {
+        const memberRef = this.firestore.doc(`classes/${classId}/members/${memberId}`);
+        return memberRef.update({ groupId: 'ungrouped' }).then(() => {
+            return this.firestore.collection(`classes/${classId}/groups`).get().toPromise().then(groupsSnapshot => {
+                groupsSnapshot.forEach(groupDoc => {
+                    const groupData = groupDoc.data() as Group;
+                    if (groupData.members.includes(memberId)) {
+                        const updatedMembers = groupData.members.filter(id => id !== memberId);
+                        this.firestore.doc(`classes/${classId}/groups/${groupDoc.id}`).update({ members: updatedMembers });
+                    }
+                });
+            });
+        });
+    }
+
+    deleteMemberFromClass(memberId: string, classId: string): Promise<void> {
+        const memberRef = this.firestore.doc(`classes/${classId}/members/${memberId}`);
+        return memberRef.delete().then(() => {
+            return this.firestore.collection(`classes/${classId}/groups`).get().toPromise().then(groupsSnapshot => {
+                groupsSnapshot.forEach(groupDoc => {
+                    const groupData = groupDoc.data() as Group;
+                    if (groupData.members.includes(memberId)) {
+                        const updatedMembers = groupData.members.filter(id => id !== memberId);
+                        this.firestore.doc(`classes/${classId}/groups/${groupDoc.id}`).update({ members: updatedMembers });
+                    }
+                });
+            });
+        });
     }
 
     getClassMembersLength(classId: string): Observable<number> {
@@ -118,18 +146,23 @@ export class ClassService {
         );
     }
 
-    // storeClasses(){
-    //     dummyClasses.forEach(cls => {
-    //         const classData = {
-    //             id: cls.id,
-    //             title: cls.title,
-    //             subTitle: cls.subTitle,
-    //             owner: cls.owner,
-    //             imagePath: cls.imagePath,
-    //             members: cls.members,
-    //             posts: cls.posts ? cls.posts.map(post => ({ content: post.content, publisher: post.publisher, createdDate: post.createdDate })) : []
-    //         };
-    //         this.firestore.collection('classes').add(classData);
-    //     });
-    // }
+    getGroupById(groupId: string): Observable<Group> {
+        return this.firestore.doc<Group>(`groups/${groupId}`).snapshotChanges().pipe(
+            map(action => {
+                const data = action.payload.data() as Group;
+                const id = action.payload.id;
+                return { id, ...data };
+            })
+        );
+    }
+
+    getGroups(classId: string): Observable<Group[]> {
+        return this.firestore.collection(`classes/${classId}/groups`).snapshotChanges().pipe(
+            map(actions => actions.map(a => {
+                const data = a.payload.doc.data() as Group;
+                const id = a.payload.doc.id;
+                return { id, ...data };
+            }))
+        );
+    }
 }

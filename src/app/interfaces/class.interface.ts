@@ -17,10 +17,11 @@ export interface Member {
     userId: string;
     memberRole: string;
     users?: User[];
+    groupId?: string;
 }
 
 export interface Group {
     id: string;
-    name: string;
-    members: Member[];
+    title: string;
+    members: string[];
 }

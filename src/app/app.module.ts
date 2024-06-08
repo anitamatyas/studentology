@@ -31,7 +31,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
-import { CreateTestDialogComponent } from './main-layout/dropdowns/create-test-dialog/create-test-dialog.component';
+import { CreateTestDialogComponent } from './popups/create-test-dialog/create-test-dialog.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ProfileSettingsComponent } from './main-layout/profile-settings/profile-settings.component';
@@ -42,6 +42,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AddMemberDialogComponent } from './popups/add-member-dialog/add-member-dialog.component';
+import { InfoDialogComponent } from './popups/info-dialog/info-dialog.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoadingSpinnerComponent,
     PostComponent,
     CreateTestDialogComponent,
-    ProfileSettingsComponent
+    ProfileSettingsComponent,
+    AddMemberDialogComponent,
+    InfoDialogComponent
   ],
   imports: [
     BrowserModule,

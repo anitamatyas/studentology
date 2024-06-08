@@ -6,7 +6,7 @@ import { User } from '../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    constructor(private firestore: AngularFirestore) {}
+    constructor(private firestore: AngularFirestore) { }
 
     getUserById(userId: string): Observable<User> {
         return this.firestore
@@ -22,6 +22,18 @@ export class UserService {
                         throw new Error('User not found');
                     }
                 })
+            );
+    }
+
+    getUserByEmail(email: string) {
+        return this.firestore.collection('users', ref => ref.where('email', '==', email))
+            .snapshotChanges()
+            .pipe(
+                map(actions => actions.map(a => {
+                    const data = a.payload.doc.data() as User;
+                    const id = a.payload.doc.id;
+                    return { id, ...data };
+                })[0])
             );
     }
 }
