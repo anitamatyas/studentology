@@ -44,6 +44,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddMemberDialogComponent } from './popups/add-member-dialog/add-member-dialog.component';
 import { InfoDialogComponent } from './popups/info-dialog/info-dialog.component';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { InfoDialogComponent } from './popups/info-dialog/info-dialog.component'
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
   ],
   providers: [
     provideAnimationsAsync(),

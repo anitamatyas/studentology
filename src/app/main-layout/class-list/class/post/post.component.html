@@ -8,6 +8,15 @@
       </div>
     </ng-container>
     <div class="post-content" [innerHTML]="post.content"></div>
+    <div *ngIf="post.attachments && post.attachments.length > 0" class="attached-files">
+      <div class="file-info" *ngFor="let file of post.attachments">
+        <a [href]="file.url" download>
+          <div class="file-details">
+            <span>{{ file.name }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
   <hr *ngIf="(commentsOnPost$ | async)?.length > 0">
   <div *ngFor="let comment of (commentsOnPost$ | async)">

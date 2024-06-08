@@ -7,6 +7,7 @@ export interface Post {
     content: string;
     publisherId: string;
     createdDate: Timestamp;
+    attachments?: {name: string, url: string}[];
 }
 
 export interface PostComment {

@@ -17,13 +17,20 @@
                   <textarea id="postText" [(ngModel)]="postText" name="postText" class="form-control"
                     placeholder="Write a post here" rows="3"></textarea>
                 </div>
+                <div class="attachments-container">
+                  <div *ngFor="let file of attachedFiles">
+                    {{ file.name }}
+                  </div>
+                </div>
                 <div class="button-container">
                   <button type="submit" mat-flat-button color="primary" [disabled]="!postText">Post</button>
+                  <button type="button" mat-flat-button color="primary" (click)="fileInput.click()">Attach</button>
+                  <input type="file" #fileInput style="display:none" (change)="handleFileInput($event)" multiple>
                   <button mat-button [matMenuTriggerFor]="menu">Add new</button>
-                    <mat-menu #menu="matMenu">
-                      <button mat-menu-item>Assignment</button>
-                      <button mat-menu-item (click)="openCreateTestDialog()">Test</button>
-                    </mat-menu>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>Assignment</button>
+                    <button mat-menu-item (click)="openCreateTestDialog()">Test</button>
+                  </mat-menu>
                 </div>
               </form>
             </div>
@@ -61,7 +68,7 @@
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
-                    <button mat-menu-item *ngIf="element.groupId != 'ungrouped'" (click)="ungroupMember(element)">Ungroup Member</button>
+                    <button mat-menu-item *ngIf="element.groupId != 'ungrouped'" (click)="ungroupMember(element)">Remove member from group</button>
                     <button mat-menu-item (click)="deleteMemberFromClass(element)">Delete member from class</button>
                   </mat-menu>
                 </td>

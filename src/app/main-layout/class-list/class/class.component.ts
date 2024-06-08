@@ -3,7 +3,7 @@ import { Class, Group, Member } from '../../../interfaces/class.interface';
 import { ClassService } from '../../../services/class.service';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../../interfaces/post.interface';
-import { Subscription, switchMap, take, tap } from 'rxjs';
+import { Observable, Subscription, switchMap, take, tap } from 'rxjs';
 import { PostService } from '../../../services/post.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../interfaces/user.interface';
@@ -36,6 +36,7 @@ export class ClassComponent  implements OnInit, OnDestroy {
   classOwner: User;
   groups: Group[] = [];
   groupedMembers: { [groupId: string]: Member[] } = {};
+  attachedFiles: File[] = [];
 
   constructor(
     private classService: ClassService,
@@ -86,9 +87,27 @@ export class ClassComponent  implements OnInit, OnDestroy {
   onSubmit() {
     if (this.postText) {
       const formattedText = this.formatText(this.postText);
-      this.postService.addPost(this.selectedClassId, formattedText, this.user.id);
-      console.log(this.postText);
-      this.postText = '';
+      if (this.attachedFiles.length > 0) {
+        this.postService.uploadAttachments(this.attachedFiles).subscribe((attachmentUrls) => {
+          const attachments = this.attachedFiles.map((file, index) => ({
+            name: file.name,
+            url: attachmentUrls[index]
+          }));
+          this.postService.addPost(this.selectedClassId, formattedText, this.user.id, attachments);
+          this.postText = '';
+          this.attachedFiles = [];
+        });
+      } else {
+        this.postService.addPost(this.selectedClassId, formattedText, this.user.id, []);
+        this.postText = '';
+      }
+    }
+  }
+
+  handleFileInput(event: any) {
+    const files = event.target.files;
+    for (let file of files) {
+      this.attachedFiles.push(file);
     }
   }
 

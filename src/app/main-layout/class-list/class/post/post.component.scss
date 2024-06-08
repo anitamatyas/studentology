@@ -109,3 +109,36 @@
 hr {
     margin: 0;
 }
+
+.attached-files {
+    display: flex;
+    gap: 1em;
+    margin-top: 10px;
+}
+
+.file-info {
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    a {
+        color: gray;
+        font-style: normal;
+    }
+}
+
+.file-details {
+    display: flex;
+    align-items: center;
+}
+
+.file-details span {
+    margin-right: 10px;
+}
+
+.file-details i {
+    cursor: pointer;
+}
