@@ -1,10 +1,17 @@
 .header {
     padding: 1em;
+    position: relative;
     border-radius: 10px;
     color: white;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
     box-shadow: 0px 0px 4px 1px #efcaca;
+
+    .edit-class-btn {
+        position: absolute;
+        right: 0;
+        top: 0.5em;
+    }
 }
 
 .left-container {
@@ -28,6 +35,10 @@
         width: 100%;
         padding: .8em;
     }
+}
+
+.members-wrapper {
+    padding: 1em 0;
 }
 
 app-post {
@@ -84,7 +95,7 @@ app-post {
 }
 
 .group-name {
-    font-size: 1.3em;
+    font-size: 1.5em;
     font-weight: 400;
     .mat-icon {
         font-size: 20px;

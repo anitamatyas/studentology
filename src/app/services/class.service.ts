@@ -116,6 +116,18 @@ export class ClassService {
         });
     }
 
+    addNewGroup(classId: string, groupTitle: string): Promise<void> {
+        const groupsCollection = this.firestore.collection(`classes/${classId}/groups`);
+        const newGroupRef = groupsCollection.doc();
+        const newGroupId = newGroupRef.ref.id;
+
+        return newGroupRef.set({
+            id: newGroupId,
+            title: groupTitle,
+            members: []
+        });
+    }
+
     deleteMemberFromClass(memberId: string, classId: string): Promise<void> {
         const memberRef = this.firestore.doc(`classes/${classId}/members/${memberId}`);
         return memberRef.delete().then(() => {
@@ -164,5 +176,13 @@ export class ClassService {
                 return { id, ...data };
             }))
         );
+    }
+
+    updateGroupName(classId: string, groupId: string, newName: string): Promise<void> {
+        return this.firestore.doc(`classes/${classId}/groups/${groupId}`).update({ title: newName });
+    }
+
+    updateClassTitle(classId: string, newTitle: string): Promise<void> {
+        return this.firestore.doc(`classes/${classId}`).update({ title: newTitle });
     }
 }

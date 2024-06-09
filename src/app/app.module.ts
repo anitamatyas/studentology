@@ -45,6 +45,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AddMemberDialogComponent } from './popups/add-member-dialog/add-member-dialog.component';
 import { InfoDialogComponent } from './popups/info-dialog/info-dialog.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { EditNameDialogComponent } from './popups/edit-name-dialog/edit-name-dialog.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     CreateTestDialogComponent,
     ProfileSettingsComponent,
     AddMemberDialogComponent,
-    InfoDialogComponent
+    InfoDialogComponent,
+    EditNameDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -89,6 +92,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
+    MatSortModule,
     MatNativeDateModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

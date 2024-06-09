@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateTestDialogComponent } from '../../../popups/create-test-dialog/create-test-dialog.component';
 import { AddMemberDialogComponent } from '../../../popups/add-member-dialog/add-member-dialog.component';
 import { DialogService } from '../../../services/dialog.service';
+import { EditNameDialogComponent } from '../../../popups/edit-name-dialog/edit-name-dialog.component';
 
 @Component({
   selector: 'app-class',
@@ -137,17 +138,58 @@ export class ClassComponent  implements OnInit, OnDestroy {
     });
   }
 
+  openEditNameDialog(title: string, currentName: string, callback: (newName: string) => void): void {
+    const dialogRef = this.dialog.open(EditNameDialogComponent, {
+      width: '400px',
+      data: { title: title, name: currentName }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        callback(result);
+      }
+    });
+  }
+
+  openEditGroupNameDialog(groupId: string, currentGroupName: string): void {
+    this.openEditNameDialog('Edit Group Name', currentGroupName, (newName: string) => {
+      this.classService.updateGroupName(this.selectedClassId, groupId, newName);
+    });
+  }
+
+  openEditClassNameDialog(currentClassTitle: string): void {
+    this.openEditNameDialog('Edit Class Title', currentClassTitle, (newTitle: string) => {
+      this.classService.updateClassTitle(this.selectedClassId, newTitle);
+    });
+  }
+
+  openNewGroupDialog() {
+    this.openEditNameDialog('Name of the new Group', 'New Group', (newName: string) => {
+      this.classService.addNewGroup(this.selectedClassId, newName).then(() => {
+        this.dialogService.showInfoDialog('Success', 'Group added successfully');
+      }).catch(error => {
+        this.dialogService.showInfoDialog('Error', `Failed to add group: ${error.message}`);
+      });
+    });
+  }
+
   groupMembersByGroup() {
-    this.groupedMembers = this.classMembers.reduce((acc, member) => {
-      const groupId = member.groupId || 'ungrouped';
-      acc[groupId] = acc[groupId] || [];
-      acc[groupId].push(member);
+    this.groupedMembers = this.groups.reduce((acc, group) => {
+      acc[group.id] = [];
       return acc;
-    }, {});
+    }, { 'ungrouped': [] });
+
+    this.classMembers.forEach(member => {
+      const groupId = member.groupId || 'ungrouped';
+      if (!this.groupedMembers[groupId]) {
+        this.groupedMembers[groupId] = [];
+      }
+      this.groupedMembers[groupId].push(member);
+    });
   }
 
   getGroupName(groupId: string): string {
-    if (groupId === 'ungrouped') return 'Ungrouped Members';
+    if (groupId === 'ungrouped') return 'Other members';
     const group = this.groups.find(group => group.id === groupId);
     return group ? group.title : 'Unknown Group';
   }
