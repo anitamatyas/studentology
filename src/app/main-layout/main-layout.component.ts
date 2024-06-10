@@ -17,7 +17,7 @@ export class MainLayoutComponent  implements OnInit {
   toggleNavbar() {
     this.collapsed = !this.collapsed;
     this.navBarCollapsed.emit(this.collapsed);
-    this.sideNavWidth = this.sideNavWidth === '65px' ? '256px' : '65px';
+    this.sideNavWidth = this.sideNavWidth === '65px' ? '200px' : '65px';
   }
 
 }

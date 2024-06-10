@@ -14,6 +14,7 @@ import { CreateTestDialogComponent } from '../../../popups/create-test-dialog/cr
 import { AddMemberDialogComponent } from '../../../popups/add-member-dialog/add-member-dialog.component';
 import { DialogService } from '../../../services/dialog.service';
 import { EditNameDialogComponent } from '../../../popups/edit-name-dialog/edit-name-dialog.component';
+import { Test } from '../../../interfaces/test.interface';
 
 @Component({
   selector: 'app-class',
@@ -119,15 +120,36 @@ export class ClassComponent  implements OnInit, OnDestroy {
 
   openCreateTestDialog(): void {
     const dialogRef = this.dialog.open(CreateTestDialogComponent, {
-      width: '50%',
-      height: '70%',
+      width: '70%',
+      height: '90%',
       data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('Test created:', result);
-      // db save
+      if (result) {
+
+        const questions = result.questions.map((q: any) => ({
+          question: q.question,
+          answers: q.answers.map((a: any) => ({
+            answer: a.answer,
+            correct: a.correct
+          }))
+        }));
+
+        const newTest: Test = {
+          classId: this.selectedClassId,
+          createdBy: this.user.id,
+          isForGroup: result.isForGroup,
+          groupId: result.isForGroup ? result.groupId : null,
+          testContent: JSON.stringify({ title: result.title, questions }),
+          dueDate: result.dueDate
+        };
+        this.classService.addTest(newTest).then(() => {
+          this.dialogService.showInfoDialog('Success', 'Test created successfully');
+        }).catch(error => {
+          this.dialogService.showInfoDialog('Error', `Failed to create test: ${error.message}`);
+        });
+      }
     });
   }
 

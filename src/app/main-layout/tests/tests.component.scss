@@ -1,0 +1,26 @@
+.tests-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    margin: 2em;
+}
+
+.container {
+    margin: 2em 0;
+    border: 1px solid lightgray;
+    padding: 3em;
+    background-color: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    box-shadow: 0px 0px 4px 1px #efcaca;
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+}
+
+.stat-container {
+    height: 20%;
+}
+
+.tests-container {
+    height: 70%;
+}

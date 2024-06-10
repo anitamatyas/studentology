@@ -47,6 +47,7 @@ import { InfoDialogComponent } from './popups/info-dialog/info-dialog.component'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { EditNameDialogComponent } from './popups/edit-name-dialog/edit-name-dialog.component';
 import { MatSortModule } from '@angular/material/sort';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,9 @@ import { MatSortModule } from '@angular/material/sort';
     MatIconModule,
     MatSortModule,
     MatNativeDateModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,

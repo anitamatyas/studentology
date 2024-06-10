@@ -1,25 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ClassService } from '../../services/class.service';
+import { ActivatedRoute } from '@angular/router';
+import { Group } from '../../interfaces/class.interface';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-create-test-dialog',
   templateUrl: './create-test-dialog.component.html',
   styleUrls: ['./create-test-dialog.component.scss'],
 })
-export class CreateTestDialogComponent  implements OnInit {
+export class CreateTestDialogComponent implements OnInit {
   testForm: FormGroup;
+  groups: Group[] = [];
+  selectedClassId: string;
 
   constructor(
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<CreateTestDialogComponent>
+    public dialogRef: MatDialogRef<CreateTestDialogComponent>,
+    private classService: ClassService,
+    private route: ActivatedRoute
   ) { }
 
+
   ngOnInit(): void {
+    this.selectedClassId = this.route.snapshot.paramMap.get('id');
+
     this.testForm = this.fb.group({
       title: ['', Validators.required],
       dueDate: ['', Validators.required],
+      isForGroup: [{ value: false, disabled: true }],
+      groupId: [''],
       questions: this.fb.array([this.createQuestion()])
+    });
+
+    this.classService.getGroups(this.selectedClassId).subscribe(groups => {
+      this.groups = groups;
+      if (this.groups.length > 0) {
+        this.testForm.get('isForGroup').enable();
+      } else {
+        this.testForm.get('isForGroup').disable();
+      }
     });
   }
 
@@ -36,7 +58,8 @@ export class CreateTestDialogComponent  implements OnInit {
 
   createAnswer(): FormGroup {
     return this.fb.group({
-      answer: ['', Validators.required]
+      answer: ['', Validators.required],
+      correct: [false]
     });
   }
 
@@ -54,8 +77,21 @@ export class CreateTestDialogComponent  implements OnInit {
 
   onSubmit(): void {
     if (this.testForm.valid) {
-      this.dialogRef.close(this.testForm.value);
+      const formValue = this.testForm.value;
+      const dueDate = new Date(formValue.dueDate);
+      const dueDateTimestamp = new Timestamp(Math.floor(dueDate.getTime() / 1000), 0);
+      const result = {
+        ...formValue,
+        dueDate: dueDateTimestamp
+      };
+
+      if (this.testForm.get('isForGroup').disabled) {
+        result.isForGroup = false;
+      }
+
+      console.log(result);
+
+      this.dialogRef.close(result);
     }
   }
-
 }

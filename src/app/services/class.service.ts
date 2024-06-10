@@ -10,6 +10,7 @@ import { convertSnap, convertSnaps } from "./db-utils";
 import { UserService } from "./user.service";
 import firebase from 'firebase/compat/app';
 import { DialogService } from "./dialog.service";
+import { Test } from "../interfaces/test.interface";
 
 // Define a color palette and a function to get a random color
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
@@ -217,5 +218,15 @@ export class ClassService {
 
     updateClassTitle(classId: string, newTitle: string): Promise<void> {
         return this.firestore.doc(`classes/${classId}`).update({ title: newTitle });
+    }
+
+    //Adds a new test.
+    addTest(test: Test): Promise<void> {
+        const testsCollection = this.firestore.collection<Test>('tests');
+        const testToSave = {
+            ...test,
+            dueDate: test.dueDate  // Ensure the dueDate is a Firebase Timestamp
+        };
+        return testsCollection.add(testToSave).then();
     }
 }

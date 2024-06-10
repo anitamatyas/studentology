@@ -67,3 +67,10 @@ hr {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+::ng-deep {
+  ngx-mat-datepicker-content {
+      background-color: white !important;
+      position: absolute;
+  }
+}

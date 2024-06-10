@@ -1,42 +1,53 @@
 <div class="mat-dialog-container">
   <h2 mat-dialog-title>Create a New Test</h2>
-<form [formGroup]="testForm" (ngSubmit)="onSubmit()" class="form-container">
-  <mat-form-field>
-    <mat-label>Title</mat-label>
-    <input matInput formControlName="title" required>
-  </mat-form-field>
+  <form [formGroup]="testForm" (ngSubmit)="onSubmit()" class="form-container">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" required>
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Due Date</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="dueDate" required>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <div style="position-relative">
+      <mat-form-field style="position-absolute">
+        <mat-label>Due Date</mat-label>
+        <input matInput [ngxMatDatetimePicker]="picker" formControlName="dueDate" required>
+        <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
+      </mat-form-field>
+    </div>
+    <mat-checkbox formControlName="isForGroup">Is this test for a group only?</mat-checkbox>
+    <div *ngIf="groups.length <= 0" class="no-groups-message">No groups available in this class</div>
 
-  <div formArrayName="questions" class="question-fields">
-    <div *ngFor="let question of questions.controls; let i = index">
-      <div [formGroupName]="i">
-        <mat-form-field>
-          <mat-label>Question {{ i + 1 }}</mat-label>
-          <input matInput formControlName="question" required>
-        </mat-form-field>
+    <mat-form-field *ngIf="testForm.get('isForGroup').value">
+      <mat-label>Group</mat-label>
+      <mat-select formControlName="groupId">
+        <mat-option *ngFor="let group of groups" [value]="group.id">{{ group.title }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <div formArrayName="answers" class="answer-fields">
-          <div *ngFor="let answer of getAnswers(i).controls; let j = index" [formGroupName]="j" class="answer-group">
-            <mat-form-field>
-              <mat-label>Answer {{ j + 1 }}</mat-label>
-              <input matInput formControlName="answer" required>
-            </mat-form-field>
+    <div formArrayName="questions" class="question-fields">
+      <div *ngFor="let question of questions.controls; let i = index">
+        <div [formGroupName]="i">
+          <mat-form-field>
+            <mat-label>Question {{ i + 1 }}</mat-label>
+            <input matInput formControlName="question" required>
+          </mat-form-field>
+
+          <div formArrayName="answers" class="answer-fields">
+            <div *ngFor="let answer of getAnswers(i).controls; let j = index" [formGroupName]="j" class="answer-group">
+              <mat-form-field>
+                <mat-label>Answer {{ j + 1 }}</mat-label>
+                <input matInput formControlName="answer" required>
+              </mat-form-field>
+              <mat-checkbox formControlName="correct">Correct</mat-checkbox>
+            </div>
+            <button mat-button type="button" (click)="addAnswer(i)">Add Answer</button>
           </div>
-          <button mat-button type="button" (click)="addAnswer(i)">Add Answer</button>
         </div>
       </div>
     </div>
-  </div>
 
-  <button mat-button type="button" (click)="addQuestion()">Add Question</button>
-  <button mat-raised-button color="primary" type="submit">Create Test</button>
-  <button mat-button mat-dialog-close>Cancel</button>
-</form>
-
+    <button mat-button type="button" (click)="addQuestion()">Add Question</button>
+    <button mat-raised-button color="primary" type="submit">Create Test</button>
+    <button mat-button mat-dialog-close>Cancel</button>
+  </form>
 </div>
