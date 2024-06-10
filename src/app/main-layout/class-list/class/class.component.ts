@@ -221,8 +221,6 @@ export class ClassComponent  implements OnInit, OnDestroy {
   }
 
   getUserRoleInClass(userId: string): string {
-    console.log(userId);
-    console.log(this.classMembers);
     const member = this.classMembers.find(m => m.userId === userId);
     return member ? member.memberRole : 'Not in class';
   }

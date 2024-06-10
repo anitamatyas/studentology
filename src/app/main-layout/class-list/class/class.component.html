@@ -1,7 +1,7 @@
 <div class="class-container">
   <ng-container *ngIf="selectedClass && classOwner">
     <div class="header" [ngStyle]="{background: selectedClass.imagePath}">
-      <h1>{{ selectedClass.title }}</h1>
+      <h2>{{ selectedClass.title }}</h2>
       <button class="edit-class-btn" *ngIf="isTeacherInClass" mat-icon-button color="white"
         (click)="openEditClassNameDialog(selectedClass.title)"><mat-icon>edit</mat-icon></button>
       <div class="owner">
@@ -28,7 +28,7 @@
                   <button type="submit" mat-flat-button color="primary" [disabled]="!postText">Post</button>
                   <button type="button" mat-flat-button color="primary" (click)="fileInput.click()">Attach</button>
                   <input type="file" #fileInput style="display:none" (change)="handleFileInput($event)" multiple>
-                  <button mat-button [matMenuTriggerFor]="menu">Add new</button>
+                  <button mat-raised-button [matMenuTriggerFor]="menu">Add new</button>
                   <mat-menu #menu="matMenu">
                     <button mat-menu-item>Assignment</button>
                     <button mat-menu-item (click)="openCreateTestDialog()">Test</button>
@@ -37,7 +37,7 @@
               </form>
             </div>
             <div class="forum-list">
-              <app-post *ngFor="let post of posts" [post]="post"></app-post>
+              <app-post *ngFor="let post of posts" [post]="post" [isTeacherInClass]="isTeacherInClass"></app-post>
             </div>
           </div>
         </mat-tab>

@@ -1,3 +1,7 @@
+h2 {
+    padding-left: 0;
+}
+
 .mat-dialog-container {
     padding: 3em;
 }
@@ -7,9 +11,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 1em;
+    gap: .5em;
 }
 
 button {
     margin-bottom: 1em;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
 }

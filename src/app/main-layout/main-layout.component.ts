@@ -8,7 +8,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class MainLayoutComponent  implements OnInit {
   collapsed = true;
   @Output() navBarCollapsed = new EventEmitter<boolean>();
-  sideNavWidth = '65px';
+  sideNavWidth = '55px';
 
   constructor() { }
 
@@ -17,7 +17,7 @@ export class MainLayoutComponent  implements OnInit {
   toggleNavbar() {
     this.collapsed = !this.collapsed;
     this.navBarCollapsed.emit(this.collapsed);
-    this.sideNavWidth = this.sideNavWidth === '65px' ? '200px' : '65px';
+    this.sideNavWidth = this.sideNavWidth === '55px' ? '200px' : '55px';
   }
 
 }

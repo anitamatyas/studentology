@@ -1,3 +1,7 @@
+:root {
+
+}
+
 .class-bg {
     border-radius: 10px;
     height: 50%;
@@ -10,10 +14,14 @@
     // }
 }
 
+.class-info {
+    padding-top: 0.5em;
+}
+
 .class-name {
     display: flex;
     align-items: center;
-    height: 30%;
+    color: var(--stud-black);
     font-weight: 500;
     font-size: 1.3em;
 }
@@ -24,7 +32,10 @@
 }
 
 .member-count {
+    position: absolute;
+    bottom: 1em;
     i {
         padding-right: .5em;
+        color: gray;
     }
 }

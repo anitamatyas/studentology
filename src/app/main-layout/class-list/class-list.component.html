@@ -1,6 +1,8 @@
+<h2>Classes</h2>
+<p>Browse all your classes or join to new ones</p>
 <div class="button-wrapper">
-    <div class="join-btn">Join to a class</div>
-    <div class="join-btn" *ngIf="signedInUser.role === 'teacher'">Create new class</div>
+    <button type="button" mat-flat-button color="primary" (click)="openJoinClassDialog()">Join to a class</button>
+    <button type="button" mat-flat-button color="primary" *ngIf="signedInUser.role === 'teacher'">Create new class</button>
 </div>
 <hr>
 <div class="class-wrapper">

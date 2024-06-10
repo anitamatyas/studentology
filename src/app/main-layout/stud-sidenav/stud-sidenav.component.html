@@ -1,7 +1,7 @@
 <mat-nav-list>
   <div class="sidenav-header"
-    [style.width]="collapsed ? '40px' : '80px'"
-    [style.height]="collapsed ? '40px' : '80px'"
+    [style.width]="collapsed ? '27px' : '55px'"
+    [style.height]="collapsed ? '27px' : '55px'"
   >
       <img
         src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png">
@@ -14,12 +14,12 @@
     [activated]="rla.isActive"
   >
     <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-    <span matListItemTitle style="color: black">{{ item.label }}</span>
+    <span matListItemTitle [class.active]="rla.isActive" style="color: #343434; font-size:16px">{{ item.label }}</span>
   </a>
   <div class="sidenav-footer">
     <a mat-list-item (click)="onLogout()">
       <mat-icon matListItemIcon>logout</mat-icon>
-      <span matListItemTitle style="color: black">Logout</span>
+      <span matListItemTitle style="color: #343434; font-size:16px">Logout</span>
     </a>
   </div>
 </mat-nav-list>

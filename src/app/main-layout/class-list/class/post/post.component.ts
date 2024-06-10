@@ -14,6 +14,7 @@ import { AuthService } from '../../../../services/auth.service';
 })
 export class PostComponent implements OnInit {
   @Input() post: Post;
+  @Input() isTeacherInClass: boolean;
   publisher$: Observable<User>;
   commentsOnPost$: Observable<PostComment[]>;
   newCommentText: string = '';

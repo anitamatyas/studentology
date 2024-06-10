@@ -1,5 +1,9 @@
 @import "../../styles.scss";
 
+.mat-sidenav-content {
+    overflow-x: hidden;
+}
+
 mat-toolbar {
     // background: linear-gradient(160deg, white, var(--primary-color-red), var(--primary-color-blue), white);
     position: relative;
@@ -7,11 +11,14 @@ mat-toolbar {
 }
 
 .nav-content {
-    padding: 24px;
+    padding: 15px;
+    @media (max-width: 480px) {
+        padding: 0;
+    }
     background-image:  url('../../assets/images/layered-waves-haikei-7.svg');
-    background-position: center center; 
-    background-repeat: no-repeat; 
-    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
     background-attachment: fixed;
 }
 
@@ -28,3 +35,4 @@ mat-sidenav-container {
 mat-sidenav, mat-sidenav-content {
     transition: all 500ms ease-in-out;
 }
+

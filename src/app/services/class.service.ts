@@ -51,6 +51,25 @@ export class ClassService {
             );
     }
 
+    findClassByCode(classCode: string): Observable<any> {
+        return this.firestore.collection('classes', ref => ref.where('classCode', '==', classCode)).snapshotChanges().pipe(
+            map(actions => {
+                const classes = actions.map(a => {
+                    const data = a.payload.doc.data() as Class;
+                    const id = a.payload.doc.id;
+                    return { id, ...data };
+                });
+                return classes.length > 0 ? classes[0] : null;
+            })
+        );
+    }
+
+    //Adds new member to class
+
+    addMemberToClass(classId: string, userId: string): Observable<void> {
+        return this.addMemberToClassAndGroup(classId, userId, 'ungrouped');
+    }
+
     //Adds a member to a class and group.
 
     addMemberToClassAndGroup(classId: string, userId: string, groupId: string): Observable<void> {

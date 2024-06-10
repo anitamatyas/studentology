@@ -3,7 +3,7 @@
     <ng-container *ngIf="publisher$ | async as publisher">
       <div class="publisher-info">
         <img [src]="publisher.profilePic" alt="Profile Picture">
-        <h3>{{ publisher.username }}</h3>
+        <h5>{{ publisher.username }}</h5>
         <span class="published-date">{{ post.createdDate.toDate() | date: 'yyyy MMMM dd hh:mm' }}</span>
       </div>
     </ng-container>
@@ -26,7 +26,7 @@
         <p>{{ comment.user.username }}</p>
         <div class="commented-date">
           <span>{{ comment.commentedDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
-          <i class="material-icons">delete</i>
+          <button *ngIf="isTeacherInClass" mat-button class="custom-icon-btn"><mat-icon>delete</mat-icon></button>
         </div>
       </div>
       <p>{{ comment.content }}</p>
