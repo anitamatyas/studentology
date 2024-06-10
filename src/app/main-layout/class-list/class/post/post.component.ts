@@ -39,7 +39,6 @@ export class PostComponent implements OnInit {
       })
     );
     this.loggedInUser = this.authService.getSignedInUser();
-    console.log(this.post.attachments);
   }
 
   addComment(postId: string) {

@@ -11,6 +11,9 @@
 }
 
 .class-name {
+    display: flex;
+    align-items: center;
+    height: 30%;
     font-weight: 500;
     font-size: 1.3em;
 }

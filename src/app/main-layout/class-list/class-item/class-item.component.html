@@ -9,9 +9,9 @@
     </div>
   </div>
   <div class="member-count">
-    <div *ngIf="membersCount | async as membersCount">
+    <div>
       <i class="bi bi-people"></i>
-      <span>{{ membersCount }}</span>
+      <span>{{ membersCount | async }}</span>
     </div>
   </div>
 </ng-container>

@@ -227,6 +227,19 @@ export class ClassComponent  implements OnInit, OnDestroy {
     });
   }
 
+  deleteGroup(groupId: string) {
+    const groupMembers = this.classMembers.filter(member => member.groupId === groupId);
+    const ungroupPromises = groupMembers.map(member => this.classService.ungroupMember(member.id, this.selectedClassId));
+    Promise.all(ungroupPromises)
+      .then(() => this.classService.deleteGroup(this.selectedClassId, groupId))
+      .then(() => {
+        this.dialogService.showInfoDialog('Success', 'Group successfully deleted.');
+      })
+      .catch(error => {
+        this.dialogService.showInfoDialog('Error', `Failed to delete group: ${error.message}`);
+      });
+  }
+
   ngOnDestroy() {
     if (this.postsSubscription) this.postsSubscription.unsubscribe();
     if (this.classMemberSubscription) this.classMemberSubscription.unsubscribe();

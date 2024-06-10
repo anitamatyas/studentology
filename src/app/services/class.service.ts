@@ -11,6 +11,7 @@ import { UserService } from "./user.service";
 import firebase from 'firebase/compat/app';
 import { DialogService } from "./dialog.service";
 
+// Define a color palette and a function to get a random color
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
 function getRandomColor(): string {
     const randomIndex = Math.floor(Math.random() * colorPalette.length);
@@ -26,11 +27,15 @@ export class ClassService {
         private dialogService: DialogService,
     ) { }
 
+    //Fetches all classes from the Firestore.
+
     getClasses(): Observable<Class[]> {
         return this.firestore.collection('classes').snapshotChanges().pipe(
             map(result => convertSnaps<Class>(result))
         );
     }
+
+    //Fetches members of a class.
 
     getClassMembers(classId: string): Observable<Member[]> {
         return this.firestore
@@ -44,6 +49,8 @@ export class ClassService {
                 }))
             );
     }
+
+    //Adds a member to a class and group.
 
     addMemberToClassAndGroup(classId: string, userId: string, groupId: string): Observable<void> {
         const classDoc = this.firestore.doc(`classes/${classId}`);
@@ -88,6 +95,8 @@ export class ClassService {
         );
     }
 
+    //Fetches members of a class along with their user details.
+
     getClassMembersWithUserDetails(classId: string): Observable<Member[]> {
         return this.getClassMembers(classId).pipe(
             switchMap(members => {
@@ -100,6 +109,8 @@ export class ClassService {
             })
         );
     }
+
+    //Ungroups a member from a group, setting their groupId to 'ungrouped'.
 
     ungroupMember(memberId: string, classId: string): Promise<void> {
         const memberRef = this.firestore.doc(`classes/${classId}/members/${memberId}`);
@@ -116,6 +127,8 @@ export class ClassService {
         });
     }
 
+    //Adds a new group to a class.
+
     addNewGroup(classId: string, groupTitle: string): Promise<void> {
         const groupsCollection = this.firestore.collection(`classes/${classId}/groups`);
         const newGroupRef = groupsCollection.doc();
@@ -127,6 +140,8 @@ export class ClassService {
             members: []
         });
     }
+
+    //Deletes a member from a class.
 
     deleteMemberFromClass(memberId: string, classId: string): Promise<void> {
         const memberRef = this.firestore.doc(`classes/${classId}/members/${memberId}`);
@@ -143,6 +158,8 @@ export class ClassService {
         });
     }
 
+    //Gets the number of members in a class.
+
     getClassMembersLength(classId: string): Observable<number> {
         return this.firestore
             .collection(`classes/${classId}/members`)
@@ -152,11 +169,15 @@ export class ClassService {
             );
     }
 
+    //Fetches a class by its ID.
+
     getClassById(classId: string): Observable<Class> {
         return this.firestore.doc<Class>(`classes/${classId}`).snapshotChanges().pipe(
             map(result => convertSnap<Class>(result))
         );
     }
+
+    //Fetches a group by its ID.
 
     getGroupById(groupId: string): Observable<Group> {
         return this.firestore.doc<Group>(`groups/${groupId}`).snapshotChanges().pipe(
@@ -168,6 +189,8 @@ export class ClassService {
         );
     }
 
+    //Fetches all groups in a class.
+
     getGroups(classId: string): Observable<Group[]> {
         return this.firestore.collection(`classes/${classId}/groups`).snapshotChanges().pipe(
             map(actions => actions.map(a => {
@@ -178,9 +201,19 @@ export class ClassService {
         );
     }
 
+    //Updates the name of a group.
+
     updateGroupName(classId: string, groupId: string, newName: string): Promise<void> {
         return this.firestore.doc(`classes/${classId}/groups/${groupId}`).update({ title: newName });
     }
+
+    //Delete group
+
+    deleteGroup(classId: string, groupId: string): Promise<void> {
+        return this.firestore.doc(`classes/${classId}/groups/${groupId}`).delete();
+    }
+
+    //Updates the title of a class.
 
     updateClassTitle(classId: string, newTitle: string): Promise<void> {
         return this.firestore.doc(`classes/${classId}`).update({ title: newTitle });

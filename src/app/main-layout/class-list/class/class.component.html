@@ -51,6 +51,8 @@
                   (click)="openEditGroupNameDialog(groupId, getGroupName(groupId))"><mat-icon>edit</mat-icon></button>
                 <button *ngIf="isTeacherInClass" mat-icon-button color="primary"
                   (click)="openAddMemberDialog(groupId)"><mat-icon>add</mat-icon></button>
+                <button *ngIf="isTeacherInClass && groupId != 'ungrouped'" mat-icon-button color="primary"
+                (click)="deleteGroup(groupId)"><mat-icon>delete</mat-icon></button>
               </div>
               <table mat-table [dataSource]="groupedMembers[groupId]" matSort matSortActive="name"
                 matSortDirection="asc" class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
