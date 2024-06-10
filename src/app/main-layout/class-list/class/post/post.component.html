@@ -25,7 +25,7 @@
         <img class="comment-profile-pic" [src]="comment.user.profilePic" alt="Profile Picture">
         <p>{{ comment.user.username }}</p>
         <div class="commented-date">
-          <span>{{ comment.commentedDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
+          <span *ngIf="!isPhone">{{ comment.commentedDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
           <button *ngIf="isTeacherInClass" mat-button class="custom-icon-btn"><mat-icon>delete</mat-icon></button>
         </div>
       </div>

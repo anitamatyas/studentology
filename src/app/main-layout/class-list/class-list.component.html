@@ -1,18 +1,21 @@
-<h2>Classes</h2>
-<p>Browse all your classes or join to new ones</p>
-<div class="button-wrapper">
-    <button type="button" mat-flat-button color="primary" (click)="openJoinClassDialog()">Join to a class</button>
-    <button type="button" mat-flat-button color="primary" *ngIf="signedInUser.role === 'teacher'">Create new class</button>
-</div>
-<hr>
-<div class="class-wrapper">
-    <app-class-item *ngFor="let class of classList" [class]="class" (click)="navigateToClass(class)">
+<div class="class-list-wrapper">
+    <h2>Classes</h2>
+    <p>Browse all your classes or join to new ones</p>
+    <div class="button-wrapper">
+        <button type="button" mat-flat-button color="primary" (click)="openJoinClassDialog()">Join to a class</button>
+        <button type="button" mat-flat-button color="primary" *ngIf="signedInUser.role === 'teacher'">Create new
+            class</button>
+    </div>
+    <hr>
+    <div class="class-wrapper">
+        <app-class-item *ngFor="let class of classList" [class]="class" (click)="navigateToClass(class)">
 
-    </app-class-item>
+        </app-class-item>
         <!-- <div class="class-bg" [style.background]="class.imagePath">
             <img src={{class.imagePath}}>
         </div>
         <div class="class-name">{{class.title}}</div>
         <div class="class-owner">from {{class.owner}}</div>
         <div class="member-count"><i class="bi bi-people"></i><span>{{class.members}}</span></div> -->
+    </div>
 </div>

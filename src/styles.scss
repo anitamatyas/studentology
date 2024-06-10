@@ -78,8 +78,9 @@ button {
   --mdc-protected-button-container-shape: 10px;
 
   @media (max-width: 480px) {
-    --mat-filled-button-horizontal-padding: 1.2em;
-    --mat-text-button-horizontal-padding: 1.2em;
+    --mat-filled-button-horizontal-padding: .4em;
+    --mat-text-button-horizontal-padding: .4em;
+    --mat-protected-button-horizontal-padding: .4em;
   }
 }
 

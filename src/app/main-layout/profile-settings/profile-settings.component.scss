@@ -9,6 +9,7 @@
     font-weight: 500;
 
     .settings-wrapper {
+        position: relative;
         height: auto;
         width: 60%;
         display: flex;
@@ -47,4 +48,10 @@
         border-radius: 50%;
         cursor: pointer;
     }
+}
+
+.btn-wrapper {
+    position: absolute;
+    right: 1em;
+    top: 1em;
 }

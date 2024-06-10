@@ -18,6 +18,10 @@ export class ThemeService {
         console.log('[THEME] - Theme set to ', theme)
     }
 
+    getCurrentTheme(): string {
+        return this.themeSubject.value;
+    }
+
     private updateCSSVariables(theme: { [key: string]: string }) {
         Object.keys(theme).forEach(key => {
             document.documentElement.style.setProperty(`--${key}`, theme[key]);

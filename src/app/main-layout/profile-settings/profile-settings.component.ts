@@ -11,57 +11,65 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss'],
 })
-export class ProfileSettingsComponent  implements OnInit {
+export class ProfileSettingsComponent implements OnInit {
   loggedInUser: User;
   themes = THEMES;
-  editMode = {
-    username: false,
-    email: false,
-    profilePic: false
-  };
+  editMode: boolean = false;
   profileForm: FormGroup;
+  selectedTheme: string;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private themeService: ThemeService,
+    public themeService: ThemeService,
     private fb: FormBuilder
   ) { }
 
   ngOnInit() {
     this.loggedInUser = this.authService.getSignedInUser();
+    this.selectedTheme = this.themeService.getCurrentTheme();
     this.profileForm = this.fb.group({
       username: [this.loggedInUser.username],
-      email: [this.loggedInUser.email]
+      email: [this.loggedInUser.email],
+      profilePic: [null]
     });
   }
 
   changeTheme(theme: string) {
-    this.themeService.setTheme(theme);
+    this.selectedTheme = theme;
+    if (!this.editMode) {
+      this.themeService.setTheme(theme);
+    }
   }
 
-  toggleEditMode(field: string) {
-    this.editMode[field] = !this.editMode[field];
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+    if (!this.editMode) {
+      this.saveChanges();
+    }
   }
 
-  saveChanges(field: string) {
-    this.editMode[field] = false;
-    console.log(this.profileForm.get(field).value);
-    // this.userService.updateUser(this.loggedInUser.id, { [field]: this.profileForm.get(field).value })
-    //   .subscribe(updatedUser => {
-    //     this.loggedInUser[field] = updatedUser[field];
-    //   });
+  saveChanges() {
+    const updatedData = {
+      username: this.profileForm.get('username').value,
+      email: this.profileForm.get('email').value,
+      profilePic: this.profileForm.get('profilePic').value
+    };
+
+    this.userService.updateUser(this.loggedInUser.id, updatedData).subscribe(updatedUser => {
+      this.loggedInUser = updatedUser;
+      this.themeService.setTheme(this.selectedTheme);
+    }, error => {
+      console.error('Failed to update user', error);
+    });
+
+    this.editMode = false;
   }
 
   handleProfilePicChange(event) {
     const file = event.target.files[0];
     if (file) {
-      console.log(file);
-      // this.userService.uploadProfilePic(this.loggedInUser.id, file).subscribe(url => {
-      //   this.loggedInUser.profilePic = url;
-      //   this.editMode.profilePic = false;
-      // });
+      this.profileForm.get('profilePic').setValue(file);
     }
   }
-
 }

@@ -120,7 +120,7 @@ export class ClassComponent  implements OnInit, OnDestroy {
 
   openCreateTestDialog(): void {
     const dialogRef = this.dialog.open(CreateTestDialogComponent, {
-      width: '70%',
+      width: '80%',
       height: '90%',
       data: {}
     });

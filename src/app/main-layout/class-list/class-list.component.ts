@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/class.interface';
 import { ClassService } from '../../services/class.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../interfaces/user.interface';
@@ -46,12 +46,14 @@ export class ClassListComponent implements OnInit{
   }
 
   openJoinClassDialog(): void {
+    console.log('openJoinClassDialog called');
     const dialogRef = this.dialog.open(EditNameDialogComponent, {
       width: '400px',
       data: { title: 'Enter Class Code', name: '' }
     });
 
     dialogRef.afterClosed().subscribe(classCode => {
+      console.log('Dialog closed', classCode);
       if (classCode) {
         this.joinClass(classCode);
       }
@@ -59,10 +61,10 @@ export class ClassListComponent implements OnInit{
   }
 
   joinClass(classCode: string): void {
-    this.classService.findClassByCode(classCode).subscribe(classData => {
+    this.classService.findClassByCode(classCode).pipe(take(1)).subscribe(classData => {
       if (classData) {
         this.classService.addMemberToClass(classData.id, this.signedInUser.id).subscribe(() => {
-          this.dialogService.showInfoDialog('Success', 'Successfully joined the class. Waiting for owner to accept.');
+          this.dialogService.showInfoDialog('Success', 'Successfully joined the class');
         }, error => {
           this.dialogService.showInfoDialog('Error', `Failed to join class: ${error.message}`);
         });

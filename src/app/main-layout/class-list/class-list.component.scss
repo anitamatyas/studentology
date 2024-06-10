@@ -1,5 +1,11 @@
 @import "../../../styles.scss";
 
+.class-list-wrapper {
+    @media (max-width: 480px) {
+        padding: 1em;
+    }
+}
+
 .class-wrapper {
 
     display: flex;
@@ -42,7 +48,7 @@ app-class-item, .add-item {
 
     @media (max-width: 480px) {
         height: 230px;
-        width: 250px;
+        width: 293px;
         margin: 5px;
     }
 

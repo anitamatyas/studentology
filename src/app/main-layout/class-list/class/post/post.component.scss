@@ -71,6 +71,10 @@
             gap: 0.2em;
             font-size: 0.8em;
 
+            @media (max-width: 480px) {
+                display: none;
+            }
+
             .delete {
                 font-size: 0.2em;
             }
