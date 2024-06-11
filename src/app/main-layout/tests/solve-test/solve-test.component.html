@@ -1,0 +1,19 @@
+<div class="solve-test-container" *ngIf="test && testContent">
+  <h2>{{ testContent.title }}</h2>
+  <form [formGroup]="solveTestForm" (ngSubmit)="onSubmit()">
+    <div formArrayName="questions">
+      <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i" class="questions">
+        <h4>{{ question.get('question').value }} ({{ question.get('points').value }} points)</h4>
+        <div formArrayName="answers">
+          <div *ngFor="let answer of getAnswers(i).controls; let j = index">
+            <mat-checkbox [formControlName]="j">{{ testContent.questions[i].answers[j].answer }}</mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-container">
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+      <button mat-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

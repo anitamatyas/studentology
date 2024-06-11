@@ -9,6 +9,8 @@ import { TestsComponent } from "./main-layout/tests/tests.component";
 import { ClassComponent } from "./main-layout/class-list/class/class.component";
 import { AuthGuard } from "./auth/auth.guard";
 import { ProfileSettingsComponent } from "./main-layout/profile-settings/profile-settings.component";
+import { SolveTestComponent } from "./main-layout/tests/solve-test/solve-test.component";
+import { UnsavedChangesGuard } from "./unsaved-changes-gurad";
 
 const appRoutes: Routes = [
     { path: 'auth', component: AuthComponent },
@@ -24,6 +26,7 @@ const appRoutes: Routes = [
                 { path: 'calendar', component: CalendarComponent },
                 { path: 'tests', component: TestsComponent },
                 { path: 'settings', component: ProfileSettingsComponent },
+                { path: 'solve-test/:id', component: SolveTestComponent, canDeactivate: [UnsavedChangesGuard] },
                 { path: '', redirectTo: 'classes', pathMatch: 'full' }
         ]
     },

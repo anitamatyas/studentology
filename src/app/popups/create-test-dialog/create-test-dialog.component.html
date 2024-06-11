@@ -32,6 +32,13 @@
             <input matInput formControlName="question" required>
           </mat-form-field>
 
+          <mat-form-field>
+            <mat-label>Points</mat-label>
+            <mat-select formControlName="points" required>
+              <mat-option *ngFor="let point of points" [value]="point">{{ point }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <div formArrayName="answers" class="answer-fields">
             <div *ngFor="let answer of getAnswers(i).controls; let j = index" [formGroupName]="j" class="answer-group">
               <mat-form-field>

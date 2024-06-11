@@ -15,6 +15,7 @@ export class CreateTestDialogComponent implements OnInit {
   testForm: FormGroup;
   groups: Group[] = [];
   selectedClassId: string;
+  points = Array.from({ length: 10 }, (_, i) => i + 1);
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +23,6 @@ export class CreateTestDialogComponent implements OnInit {
     private classService: ClassService,
     private route: ActivatedRoute
   ) { }
-
 
   ngOnInit(): void {
     this.selectedClassId = this.route.snapshot.paramMap.get('id');
@@ -52,6 +52,7 @@ export class CreateTestDialogComponent implements OnInit {
   createQuestion(): FormGroup {
     return this.fb.group({
       question: ['', Validators.required],
+      points: [1, Validators.required],
       answers: this.fb.array([this.createAnswer()])
     });
   }

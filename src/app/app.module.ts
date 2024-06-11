@@ -35,7 +35,6 @@ import { CreateTestDialogComponent } from './popups/create-test-dialog/create-te
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ProfileSettingsComponent } from './main-layout/profile-settings/profile-settings.component';
-import {FloatLabelType} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioModule} from '@angular/material/radio';
@@ -49,6 +48,8 @@ import { EditNameDialogComponent } from './popups/edit-name-dialog/edit-name-dia
 import { MatSortModule } from '@angular/material/sort';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { CreateClassDialogComponent } from './popups/create-class-dialog/create-class-dialog.component';
+import { SolveTestComponent } from './main-layout/tests/solve-test/solve-test.component';
+import { ConfirmDialogComponent } from './popups/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,9 @@ import { CreateClassDialogComponent } from './popups/create-class-dialog/create-
     AddMemberDialogComponent,
     InfoDialogComponent,
     EditNameDialogComponent,
-    CreateClassDialogComponent
+    CreateClassDialogComponent,
+    SolveTestComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

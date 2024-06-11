@@ -1,4 +1,35 @@
+<h2>Tests</h2>
+<p>Find all your tests and complete before ending</p>
+<hr>
 <div class="tests-page-container">
-  <div class="stat-container container"></div>
-  <div class="tests-container container"></div>
+  <div *ngFor="let testItem of tests" class="test-item">
+    <div class="left-container">
+      <div class="test-icon-container">
+        <img class="test-icon" src="../../../assets/images/test.png" alt="">
+      </div>
+      <div class="title">
+        <h4>{{ testItem.test.parsedTestContent.title }}</h4>
+        <div *ngIf="testItem.test.dueDate.toDate() < currentDate" class="test-label warn">
+          <span>Expired</span>
+        </div>
+        <div *ngIf="testItem.test.dueDate.toDate() > currentDate" class="test-label info">
+          <span>Open</span>
+        </div>
+      </div>
+      <p>Posted: </p> <!--  NEED TO SAVE createdDate -->
+      <div class="class-info">
+        <span>Class: </span>
+        <span class="class-title"> {{ testItem.classTitle }} </span>
+      </div>
+      <div class="due-date">
+        <span>Due date: </span>
+        <span style="font-weight: 500;"> {{ testItem.test.dueDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
+      </div>
+    </div>
+    <div class="right-container">
+      <button *ngIf="testItem.isTeacher" mat-raised-button (click)="gradeTest(testItem.test)">Grade Test</button>
+      <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.isGraded" mat-raised-button
+        (click)="solveTest(testItem.test)">Solve Test</button>
+    </div>
+  </div>
 </div>

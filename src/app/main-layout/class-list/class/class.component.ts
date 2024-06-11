@@ -130,6 +130,7 @@ export class ClassComponent  implements OnInit, OnDestroy {
 
         const questions = result.questions.map((q: any) => ({
           question: q.question,
+          points: q.points,
           answers: q.answers.map((a: any) => ({
             answer: a.answer,
             correct: a.correct
@@ -142,6 +143,7 @@ export class ClassComponent  implements OnInit, OnDestroy {
           isForGroup: result.isForGroup,
           groupId: result.isForGroup ? result.groupId : null,
           testContent: JSON.stringify({ title: result.title, questions }),
+          isGraded: false,
           dueDate: result.dueDate
         };
         this.classService.addTest(newTest).then(() => {
