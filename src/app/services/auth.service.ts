@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Subject, Subscription, catchError, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription, catchError, map, switchMap, tap, throwError } from "rxjs";
 import { User } from "../interfaces/user.interface";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { Router } from "@angular/router";
@@ -126,6 +126,23 @@ export class AuthService implements OnInit, OnDestroy{
 
     public getSignedInUser(){
         return this.user.value;
+    }
+
+    public getSignedInUserObservable(): Observable<User> {
+        return this.angularFireAuth.authState.pipe(
+            switchMap(user => {
+                if (user) {
+                    return this.firestore.collection('users').doc(user.uid).snapshotChanges().pipe(
+                        map(action => {
+                            const data = action.payload.data() as User;
+                            return { id: action.payload.id, ...data };
+                        })
+                    );
+                } else {
+                    return throwError(new Error('No user is signed in'));
+                }
+            })
+        );
     }
 
     ngOnDestroy() {

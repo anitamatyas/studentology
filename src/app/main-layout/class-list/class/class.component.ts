@@ -211,7 +211,7 @@ export class ClassComponent  implements OnInit, OnDestroy {
   }
 
   getGroupName(groupId: string): string {
-    if (groupId === 'ungrouped') return 'Other members';
+    if (groupId === 'ungrouped') return 'Ungrouped members';
     const group = this.groups.find(group => group.id === groupId);
     return group ? group.title : 'Unknown Group';
   }

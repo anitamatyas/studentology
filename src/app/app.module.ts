@@ -48,6 +48,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { EditNameDialogComponent } from './popups/edit-name-dialog/edit-name-dialog.component';
 import { MatSortModule } from '@angular/material/sort';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { CreateClassDialogComponent } from './popups/create-class-dialog/create-class-dialog.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     ProfileSettingsComponent,
     AddMemberDialogComponent,
     InfoDialogComponent,
-    EditNameDialogComponent
+    EditNameDialogComponent,
+    CreateClassDialogComponent
   ],
   imports: [
     BrowserModule,

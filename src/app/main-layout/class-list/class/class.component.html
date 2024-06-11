@@ -5,6 +5,7 @@
       <button class="edit-class-btn" *ngIf="isTeacherInClass" mat-icon-button color="white"
         (click)="openEditClassNameDialog(selectedClass.title)"><mat-icon>edit</mat-icon></button>
       <div class="owner">
+        <h5> {{selectedClass.subTitle}} </h5>
         <span> Teacher: {{classOwner.username}} </span><br>
         <span> Class code: {{selectedClass.classCode}} </span><br>
       </div>

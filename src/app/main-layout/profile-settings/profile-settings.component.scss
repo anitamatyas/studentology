@@ -55,3 +55,23 @@
     right: 1em;
     top: 1em;
 }
+
+.theme-wrapper {
+    margin: 20px 0;
+
+    .theme-picker {
+        display: flex;
+        gap: 10px;
+
+        .theme-selector {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+
+            &.selected {
+                border: 3px solid #000;
+            }
+        }
+    }
+}

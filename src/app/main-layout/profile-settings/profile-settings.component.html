@@ -1,33 +1,31 @@
-<div class="settings-container">
-  <div class="settings-wrapper">
-    <div class="btn-wrapper">
-      <button mat-raised-button color="primary" (click)="toggleEditMode()">
-        {{ editMode ? 'Save Changes' : 'Edit' }}
-      </button>
-    </div>
-    <div class="profile-pic-wrapper">
-      <img [src]="loggedInUser?.profilePic" alt="Profile Picture" class="profile-pic">
-      <button mat-icon-button (click)="toggleEditMode()">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <input *ngIf="editMode" type="file" (change)="handleProfilePicChange($event)">
-    </div>
-    <div class="username-wrapper">
-      <h3>Username</h3>
-      <span *ngIf="!editMode">{{ loggedInUser.username }}</span>
-      <input *ngIf="editMode" [formControl]="profileForm.get('username')">
-    </div>
-    <div class="email-wrapper">
-      <h3>Email</h3>
-      <span *ngIf="!editMode">{{ loggedInUser.email }}</span>
-      <input *ngIf="editMode" [formControl]="profileForm.get('email')">
-    </div>
-    <div class="theme-wrapper">
-      <h3>Theme</h3>
-      <div class="theme-picker">
-        <div *ngFor="let theme of themes | keyvalue" (click)="changeTheme(theme.key)" [ngStyle]="{'background-color': theme.value.primary}"  class="theme-selector" [class.selected]="selectedTheme === theme.key"></div>
+<ng-container *ngIf="loggedInUser$ | async as loggedInUser">
+  <div class="settings-container">
+    <div class="settings-wrapper">
+      <div class="btn-wrapper">
+        <button mat-raised-button color="primary" (click)="toggleEditMode()">
+          {{ editMode ? 'Save Changes' : 'Edit' }}
+        </button>
       </div>
-      <p *ngIf="!editMode && selectedTheme !== themeService.getCurrentTheme()">Theme will be applied after saving changes.</p>
+      <div class="profile-pic-wrapper">
+        <img [src]="loggedInUser.profilePic" alt="Profile Picture" class="profile-pic">
+      </div>
+      <div class="username-wrapper">
+        <h3>Username</h3>
+        <span *ngIf="!editMode">{{ loggedInUser.username }}</span>
+        <input *ngIf="editMode" [(ngModel)]="updatedUsername" name="username">
+      </div>
+      <div class="email-wrapper">
+        <h3>Email</h3>
+        <span *ngIf="!editMode">{{ loggedInUser.email }}</span>
+        <input *ngIf="editMode" [(ngModel)]="updatedEmail" name="email">
+      </div>
+      <div class="theme-wrapper">
+        <h3>Theme</h3>
+        <div class="theme-picker">
+          <div *ngFor="let theme of themes | keyvalue" (click)="changeTheme(theme.key)" [ngStyle]="{'background-color': theme.value.primary}" class="theme-selector" [class.selected]="selectedTheme === theme.key"></div>
+        </div>
+        <p *ngIf="!editMode && selectedTheme !== themeService.getCurrentTheme()">Theme will be applied after saving changes.</p>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>

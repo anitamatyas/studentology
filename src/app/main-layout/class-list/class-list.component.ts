@@ -9,6 +9,7 @@ import { User } from '../../interfaces/user.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../services/dialog.service';
 import { EditNameDialogComponent } from '../../popups/edit-name-dialog/edit-name-dialog.component';
+import { CreateClassDialogComponent } from '../../popups/create-class-dialog/create-class-dialog.component';
 
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
 
@@ -73,6 +74,23 @@ export class ClassListComponent implements OnInit{
       }
     }, error => {
       this.dialogService.showInfoDialog('Error', `Error searching for class: ${error.message}`);
+    });
+  }
+
+  openCreateClassDialog(): void {
+    const dialogRef = this.dialog.open(CreateClassDialogComponent, {
+      width: '400px',
+      data: { owner: this.signedInUser }
+    });
+
+    dialogRef.afterClosed().subscribe(newClass => {
+      if (newClass) {
+        this.classService.createClass(newClass).then(() => {
+          this.dialogService.showInfoDialog('Success', 'Class created successfully');
+        }).catch(error => {
+          this.dialogService.showInfoDialog('Error', `Failed to create class: ${error.message}`);
+        });
+      }
     });
   }
 

@@ -38,34 +38,14 @@ export class UserService {
             );
     }
 
-    updateUser(userId: string, updatedData: any): Observable<User> {
+    updateUser(userId: string, updatedData: Partial<User>): Observable<User> {
         const userRef = this.firestore.doc<User>(`users/${userId}`);
-
-        if (updatedData.profilePic) {
-            const filePath = `profile_pics/${userId}_${Date.now()}`;
-            const fileRef = this.storage.ref(filePath);
-            const uploadTask = this.storage.upload(filePath, updatedData.profilePic);
-
-            return from(uploadTask).pipe(
-                switchMap(() => fileRef.getDownloadURL()),
-                switchMap((url) => {
-                    updatedData.profilePic = url;
-                    return from(userRef.update(updatedData));
-                }),
-                switchMap(() => userRef.valueChanges()),
-                catchError(error => {
-                    console.error('Failed to update user', error);
-                    throw error;
-                })
-            );
-        } else {
-            return from(userRef.update(updatedData)).pipe(
-                switchMap(() => userRef.valueChanges()),
-                catchError(error => {
-                    console.error('Failed to update user', error);
-                    throw error;
-                })
-            );
-        }
+        return from(userRef.update(updatedData)).pipe(
+            switchMap(() => userRef.valueChanges()),
+            catchError(error => {
+                console.error('Failed to update user', error);
+                throw error;
+            })
+        );
     }
 }

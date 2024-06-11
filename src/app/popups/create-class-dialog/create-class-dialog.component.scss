@@ -1,0 +1,16 @@
+.color-picker {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.color-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.color-circle.selected {
+    border: 2px solid #000;
+}

@@ -1,38 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../interfaces/user.interface';
 import { AuthService } from '../../services/auth.service';
 import { THEMES } from '../../services/themes';
 import { ThemeService } from '../../services/themes.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import { tap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile-settings',
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss'],
 })
-export class ProfileSettingsComponent implements OnInit {
+export class ProfileSettingsComponent implements OnInit, OnDestroy {
+  loggedInUser$: Observable<User>;
   loggedInUser: User;
+  userSubscription: Subscription;
   themes = THEMES;
   editMode: boolean = false;
-  profileForm: FormGroup;
+  updatedUsername: string;
+  updatedEmail: string;
   selectedTheme: string;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    public themeService: ThemeService,
-    private fb: FormBuilder
+    public themeService: ThemeService
   ) { }
 
   ngOnInit() {
-    this.loggedInUser = this.authService.getSignedInUser();
+    this.loggedInUser$ = this.authService.getSignedInUserObservable().pipe(
+      tap(user => {
+        if (user) {
+          this.loggedInUser = user;
+          this.updatedUsername = user.username;
+          this.updatedEmail = user.email;
+        }
+      })
+    );
     this.selectedTheme = this.themeService.getCurrentTheme();
-    this.profileForm = this.fb.group({
-      username: [this.loggedInUser.username],
-      email: [this.loggedInUser.email],
-      profilePic: [null]
-    });
   }
 
   changeTheme(theme: string) {
@@ -51,25 +57,30 @@ export class ProfileSettingsComponent implements OnInit {
 
   saveChanges() {
     const updatedData = {
-      username: this.profileForm.get('username').value,
-      email: this.profileForm.get('email').value,
-      profilePic: this.profileForm.get('profilePic').value
+      username: this.updatedUsername,
+      email: this.updatedEmail
     };
 
-    this.userService.updateUser(this.loggedInUser.id, updatedData).subscribe(updatedUser => {
-      this.loggedInUser = updatedUser;
+    console.log(updatedData);
+
+    // Check if any data has changed
+    if (updatedData.username !== this.loggedInUser.username ||
+        updatedData.email !== this.loggedInUser.email) {
+      this.userService.updateUser(this.loggedInUser.id, updatedData).subscribe(() => {
+        this.themeService.setTheme(this.selectedTheme);
+      }, error => {
+        console.error('Failed to update user', error);
+      });
+    } else {
       this.themeService.setTheme(this.selectedTheme);
-    }, error => {
-      console.error('Failed to update user', error);
-    });
+    }
 
     this.editMode = false;
   }
 
-  handleProfilePicChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-      this.profileForm.get('profilePic').setValue(file);
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
   }
 }
