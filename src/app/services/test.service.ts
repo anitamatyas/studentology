@@ -11,7 +11,7 @@ export class TestService {
     constructor(private firestore: AngularFirestore) { }
 
     getTestsForClasses(classIds: string[]): Observable<Test[]> {
-        return this.firestore.collection<Test>('tests', ref => ref.where('classId', 'in', classIds))
+        return this.firestore.collection<Test>('tests', ref => ref.where('classId', 'in', classIds).orderBy('dueDate', 'desc'))
             .snapshotChanges().pipe(
                 map(actions => actions.map(a => {
                     const data = a.payload.doc.data() as Test;

@@ -8,6 +8,7 @@ export interface Test {
     groupId?: string;
     testContent: any;
     dueDate: Timestamp;
+    createdDate: Timestamp;
     isGraded: boolean;
     parsedTestContent?: TestContent;
 }

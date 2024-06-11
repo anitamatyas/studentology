@@ -4,7 +4,7 @@ import { ClassService } from '../../services/class.service';
 import { TestService } from '../../services/test.service';
 import { Subscription, combineLatest, of } from 'rxjs';
 import { switchMap, map, catchError, take } from 'rxjs/operators';
-import { Test, TestContent } from '../../interfaces/test.interface';
+import { Test, TestContent, Submission } from '../../interfaces/test.interface';
 import { User } from '../../interfaces/user.interface';
 import { DialogService } from '../../services/dialog.service';
 import { Router } from '@angular/router';
@@ -15,9 +15,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./tests.component.scss']
 })
 export class TestsComponent implements OnInit, OnDestroy {
-  tests: { test: Test, classTitle: string, isTeacher: boolean }[] = [];
+  tests: { test: Test, classTitle: string, isTeacher: boolean, submitted: boolean }[] = [];
   userSubscription: Subscription;
-  testsSubscription: Subscription;
   loggedInUser: User;
   currentDate: Date = new Date();
 
@@ -33,11 +32,9 @@ export class TestsComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.getSignedInUserObservable().pipe(
       switchMap(user => {
         this.loggedInUser = user;
-        console.log(user);
         return this.classService.getClassesForUser(user.id);
       }),
       switchMap(classes => {
-        console.log(classes);
         const classIds = classes.map(cls => cls.id);
         const classTitles = classes.reduce((acc, cls) => {
           acc[cls.id] = cls.title;
@@ -45,15 +42,22 @@ export class TestsComponent implements OnInit, OnDestroy {
         }, {});
         return this.testService.getTestsForClasses(classIds).pipe(
           switchMap(tests => {
-            console.log(tests);
             const testObservables = tests.map(test => {
               const parsedTestContent: TestContent = JSON.parse(test.testContent);
               return this.classService.getMemberRoleByUserIdAndClassId(this.loggedInUser.id, test.classId).pipe(
-                map(role => ({
-                  test: { ...test, parsedTestContent },
-                  classTitle: classTitles[test.classId],
-                  isTeacher: role === 'teacher'
-                }))
+                switchMap(role => {
+                  return this.testService.getSubmissions(test.id).pipe(
+                    map(submissions => {
+                      const submitted = submissions.some(submission => submission.studentId === this.loggedInUser.id);
+                      return {
+                        test: { ...test, parsedTestContent },
+                        classTitle: classTitles[test.classId],
+                        isTeacher: role === 'teacher',
+                        submitted: submitted
+                      };
+                    })
+                  );
+                })
               );
             });
             return combineLatest(testObservables);
@@ -66,7 +70,6 @@ export class TestsComponent implements OnInit, OnDestroy {
       })
     ).subscribe(tests => {
       this.tests = tests;
-      console.log(tests);
     });
   }
 
@@ -121,9 +124,6 @@ export class TestsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
-    }
-    if (this.testsSubscription) {
-      this.testsSubscription.unsubscribe();
     }
   }
 }

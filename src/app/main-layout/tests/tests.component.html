@@ -16,7 +16,7 @@
           <span>Open</span>
         </div>
       </div>
-      <p>Posted: </p> <!--  NEED TO SAVE createdDate -->
+      <p>Posted: {{ testItem.test.createdDate.toDate() | date: 'yyyy MMMM dd' }}</p>
       <div class="class-info">
         <span>Class: </span>
         <span class="class-title"> {{ testItem.classTitle }} </span>
@@ -28,8 +28,12 @@
     </div>
     <div class="right-container">
       <button *ngIf="testItem.isTeacher" mat-raised-button (click)="gradeTest(testItem.test)">Grade Test</button>
-      <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.isGraded" mat-raised-button
+      <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.submitted" mat-raised-button
         (click)="solveTest(testItem.test)">Solve Test</button>
+      <button *ngIf="!testItem.isTeacher && testItem.submitted && !testItem.isGraded" mat-raised-button disabled>Submitted</button>
+      <div *ngIf="!testItem.isTeacher && testItem.submitted && testItem.isGraded">
+        <span>Grade: {{ testItem.grade }} / 10</span>
+      </div>
     </div>
   </div>
 </div>

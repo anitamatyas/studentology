@@ -15,6 +15,7 @@ import { AddMemberDialogComponent } from '../../../popups/add-member-dialog/add-
 import { DialogService } from '../../../services/dialog.service';
 import { EditNameDialogComponent } from '../../../popups/edit-name-dialog/edit-name-dialog.component';
 import { Test } from '../../../interfaces/test.interface';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-class',
@@ -137,6 +138,8 @@ export class ClassComponent  implements OnInit, OnDestroy {
           }))
         }));
 
+        const createdDate = new Timestamp(Math.floor(Date.now() / 1000), 0)
+
         const newTest: Test = {
           classId: this.selectedClassId,
           createdBy: this.user.id,
@@ -144,7 +147,8 @@ export class ClassComponent  implements OnInit, OnDestroy {
           groupId: result.isForGroup ? result.groupId : null,
           testContent: JSON.stringify({ title: result.title, questions }),
           isGraded: false,
-          dueDate: result.dueDate
+          dueDate: result.dueDate,
+          createdDate: createdDate
         };
         this.classService.addTest(newTest).then(() => {
           this.dialogService.showInfoDialog('Success', 'Test created successfully');
