@@ -8,6 +8,9 @@ import { Test, TestContent, Submission } from '../../interfaces/test.interface';
 import { User } from '../../interfaces/user.interface';
 import { DialogService } from '../../services/dialog.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { GradesDialogComponent } from '../../popups/grades-dialog/grades-dialog.component';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-tests',
@@ -25,7 +28,9 @@ export class TestsComponent implements OnInit, OnDestroy {
     private classService: ClassService,
     private testService: TestService,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -48,12 +53,15 @@ export class TestsComponent implements OnInit, OnDestroy {
                 switchMap(role => {
                   return this.testService.getSubmissions(test.id).pipe(
                     map(submissions => {
-                      const submitted = submissions.some(submission => submission.studentId === this.loggedInUser.id);
+                      const submission = submissions.find(sub => sub.studentId === this.loggedInUser.id);
+                      const submitted = !!submission;
+                      const grade = submission ? submission.grade : undefined;
                       return {
                         test: { ...test, parsedTestContent },
                         classTitle: classTitles[test.classId],
                         isTeacher: role === 'teacher',
-                        submitted: submitted
+                        submitted: submitted,
+                        grade: grade
                       };
                     })
                   );
@@ -70,6 +78,7 @@ export class TestsComponent implements OnInit, OnDestroy {
       })
     ).subscribe(tests => {
       this.tests = tests;
+      console.log(tests);
     });
   }
 
@@ -100,6 +109,32 @@ export class TestsComponent implements OnInit, OnDestroy {
           console.log('Test marked as graded');
         });
       }
+    });
+  }
+
+  openGradesDialog(test: Test) {
+    this.testService.getSubmissions(test.id).pipe(
+      switchMap(submissions => {
+        if (submissions.length > 0) {
+          const userObservables = submissions.map(submission =>
+            this.userService.getUserById(submission.studentId).pipe(
+              map(user => ({
+                studentName: user.username,
+                studentEmail: user.email,
+                grade: submission.grade
+              }))
+            )
+          );
+          return combineLatest(userObservables);
+        } else {
+          return of([]);
+        }
+      })
+    ).subscribe(userDetails => {
+      this.dialog.open(GradesDialogComponent, {
+        width: '600px',
+        data: { userDetails }
+      });
     });
   }
 

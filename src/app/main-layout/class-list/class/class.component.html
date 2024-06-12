@@ -29,9 +29,9 @@
                   <button type="submit" mat-flat-button color="primary" [disabled]="!postText">Post</button>
                   <button type="button" mat-flat-button color="primary" (click)="fileInput.click()">Attach</button>
                   <input type="file" #fileInput style="display:none" (change)="handleFileInput($event)" multiple>
-                  <button mat-raised-button [matMenuTriggerFor]="menu">Add new</button>
+                  <button *ngIf="isTeacherInClass" mat-raised-button [matMenuTriggerFor]="menu">Add new</button>
                   <mat-menu #menu="matMenu">
-                    <button mat-menu-item>Assignment</button>
+                    <button mat-menu-item (click)="openCreateAssignmentDialog()" >Assignment</button>
                     <button mat-menu-item (click)="openCreateTestDialog()">Test</button>
                   </mat-menu>
                 </div>
@@ -44,10 +44,10 @@
         </mat-tab>
         <mat-tab label="MEMBERS">
           <div class="members-wrapper">
-            <button type="button" mat-flat-button color="primary" (click)="openNewGroupDialog()">Create new group</button>
+            <button *ngIf="isTeacherInClass" type="button" mat-flat-button color="primary" (click)="openNewGroupDialog()">Create new group</button>
             <div *ngFor="let groupId of getGroupIds()" class="members-table">
               <div class="group-name">
-                <span>{{ getGroupName(groupId) }}</span>
+                <span *ngIf="isTeacherInClass">{{ getGroupName(groupId) }}</span>
                 <button *ngIf="isTeacherInClass && groupId != 'ungrouped'" mat-icon-button color="primary"
                   (click)="openEditGroupNameDialog(groupId, getGroupName(groupId))"><mat-icon>edit</mat-icon></button>
                 <button *ngIf="isTeacherInClass" mat-icon-button color="primary"

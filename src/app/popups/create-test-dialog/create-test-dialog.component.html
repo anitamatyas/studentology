@@ -1,9 +1,14 @@
 <div class="mat-dialog-container">
-  <h2 mat-dialog-title>Create a New Test</h2>
+  <h2 mat-dialog-title>{{ isAssignment ? 'Create a New Assignment' : 'Create a New Test' }}</h2>
   <form [formGroup]="testForm" (ngSubmit)="onSubmit()" class="form-container">
     <mat-form-field>
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" required>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isAssignment">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="5"></textarea>
     </mat-form-field>
 
     <div style="position-relative">
@@ -14,29 +19,23 @@
         <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
       </mat-form-field>
     </div>
-    <mat-checkbox formControlName="isForGroup">Is this test for a group only?</mat-checkbox>
+
+    <mat-checkbox formControlName="isForGroup">Is this for a group only?</mat-checkbox>
     <div *ngIf="groups.length <= 0" class="no-groups-message">No groups available in this class</div>
 
-    <mat-form-field *ngIf="testForm.get('isForGroup').value">
+    <mat-form-field *ngIf="testForm.get('isForGroup').value && !isAssignment">
       <mat-label>Group</mat-label>
       <mat-select formControlName="groupId">
         <mat-option *ngFor="let group of groups" [value]="group.id">{{ group.title }}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <div formArrayName="questions" class="question-fields">
+    <div formArrayName="questions" class="question-fields" *ngIf="!isAssignment">
       <div *ngFor="let question of questions.controls; let i = index">
         <div [formGroupName]="i">
           <mat-form-field>
             <mat-label>Question {{ i + 1 }}</mat-label>
             <input matInput formControlName="question" required>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Points</mat-label>
-            <mat-select formControlName="points" required>
-              <mat-option *ngFor="let point of points" [value]="point">{{ point }}</mat-option>
-            </mat-select>
           </mat-form-field>
 
           <div formArrayName="answers" class="answer-fields">
@@ -52,10 +51,10 @@
         </div>
       </div>
     </div>
-    <button mat-raised-button color="primary" type="button" (click)="addQuestion()">Add Question</button>
+    <button mat-raised-button color="primary" type="button" (click)="addQuestion()" *ngIf="!isAssignment">Add Question</button>
 
     <div class="btn-container">
-      <button mat-raised-button color="accent" type="submit">Create Test</button>
+      <button mat-raised-button color="accent" type="submit">{{ isAssignment ? 'Create Assignment' : 'Create Test' }}</button>
       <button mat-button color="warn" mat-dialog-close>Cancel</button>
     </div>
   </form>

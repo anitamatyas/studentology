@@ -12,8 +12,11 @@
         <div *ngIf="testItem.test.dueDate.toDate() < currentDate" class="test-label warn">
           <span>Expired</span>
         </div>
-        <div *ngIf="testItem.test.dueDate.toDate() > currentDate" class="test-label info">
+        <div *ngIf="testItem.test.dueDate.toDate() > currentDate && !testItem.test.isGraded" class="test-label info">
           <span>Open</span>
+        </div>
+        <div *ngIf="testItem.test.dueDate.toDate() > currentDate && testItem.test.isGraded" class="test-label graded">
+          <span>Graded</span>
         </div>
       </div>
       <p>Posted: {{ testItem.test.createdDate.toDate() | date: 'yyyy MMMM dd' }}</p>
@@ -27,12 +30,13 @@
       </div>
     </div>
     <div class="right-container">
-      <button *ngIf="testItem.isTeacher" mat-raised-button (click)="gradeTest(testItem.test)">Grade Test</button>
+      <button *ngIf="testItem.isTeacher && !testItem.test.isGraded" mat-raised-button (click)="gradeTest(testItem.test)">Grade Test</button>
+      <button *ngIf="testItem.isTeacher && testItem.test.isGraded" mat-raised-button (click)="openGradesDialog(testItem.test)">See grades</button>
       <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.submitted" mat-raised-button
         (click)="solveTest(testItem.test)">Solve Test</button>
-      <button *ngIf="!testItem.isTeacher && testItem.submitted && !testItem.isGraded" mat-raised-button disabled>Submitted</button>
-      <div *ngIf="!testItem.isTeacher && testItem.submitted && testItem.isGraded">
-        <span>Grade: {{ testItem.grade }} / 10</span>
+      <button *ngIf="!testItem.isTeacher && testItem.submitted && !testItem.test.isGraded" mat-raised-button disabled>Submitted</button>
+      <div *ngIf="!testItem.isTeacher && testItem.submitted && testItem.test.isGraded">
+        <span class="grade">Grade: {{ testItem.grade | number:'1.2-2' }} / 10</span>
       </div>
     </div>
   </div>

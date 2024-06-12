@@ -1,31 +1,105 @@
-section {
-    display: table;
-  }
-
-  .example-label {
-    display: table-cell;
-    font-size: 14px;
-    margin-left: 8px;
-    min-width: 120px;
-  }
-
-  .example-button-row {
-    display: table-cell;
-    max-width: 600px;
-  }
-
-  .example-button-row .mat-mdc-button-base {
-    margin: 8px 8px 8px 0;
-  }
-
-  .example-flex-container {
+.assignments-page-container {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
+    flex-direction: column;
+    gap: .5em;
+    margin: 2em;
+}
 
-  .example-button-container {
+.assignment-item {
+    margin: .5em 0;
+    border: 1px solid lightgray;
+    background-color: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    box-shadow: 0px 0px 4px 1px #efcaca;
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+    background-color: white;
+    padding: 1.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    p,
+    span {
+        font-size: .8em;
+        margin: 0;
+
+        &.grade {
+            font-size: 1.4em;
+        }
+    }
+
+    .left-container {
+        padding-left: 4em;
+    }
+
+    .right-container {
+        margin: auto 0;
+    }
+}
+
+.due-date {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+}
+
+.class-info {
+    span {
+        font-size: 1em;
+        font-weight: 500;
+    }
+
+    .class-title {
+        color: var(--primary);
+    }
+}
+
+.assignment-icon-container {
     display: flex;
     justify-content: center;
-    width: 120px;
-  }
+    align-items: center;
+    background-color: var(--quaternary);
+    position: absolute;
+    left: 1em;
+    height: 3.5em;
+    width: 3.5em;
+    top: 29%;
+    border-radius: 50%;
+
+    .assignment-icon {
+        height: 50%;
+        width: 50%;
+    }
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+
+    h4 {
+        margin: 0;
+    }
+
+    .assignment-label {
+        padding: .1em 1em;
+        border-radius: 10px;
+        font-size: 1em;
+        font-weight: 500;
+
+        &.warn {
+            background-color: rgb(218, 98, 98);
+        }
+
+        &.info {
+            background-color: var(--tertiary);
+        }
+
+        &.graded {
+            background-color: rgb(105, 152, 105);
+        }
+    }
+}

@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Grades</h2>
+<div mat-dialog-content>
+  <ul>
+    <li *ngFor="let user of data.userDetails">
+      {{ user.studentName }} ({{ user.studentEmail }}) - Grade: {{ user.grade | number:'1.2-2' }} / 10
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+</div>

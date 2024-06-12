@@ -1,126 +1,42 @@
-<section>
-  <div class="example-label">Basic</div>
-  <div class="example-button-row">
-    <button mat-button>Basic</button>
-    <button mat-button color="primary">Primary</button>
-    <button mat-button color="accent">Accent</button>
-    <button mat-button color="warn">Warn</button>
-    <button mat-button disabled>Disabled</button>
-    <a mat-button href="https://www.google.com/" target="_blank">Link</a>
-  </div>
-</section>
-<mat-divider></mat-divider>
-<section>
-  <div class="example-label">Raised</div>
-  <div class="example-button-row">
-    <button mat-raised-button>Basic</button>
-    <button mat-raised-button color="primary">Primary</button>
-    <button mat-raised-button color="accent">Accent</button>
-    <button mat-raised-button color="warn">Warn</button>
-    <button mat-raised-button disabled>Disabled</button>
-    <a mat-raised-button href="https://www.google.com/" target="_blank">Link</a>
-  </div>
-</section>
-<mat-divider></mat-divider>
-<section>
-  <div class="example-label">Stroked</div>
-  <div class="example-button-row">
-    <button mat-stroked-button>Basic</button>
-    <button mat-stroked-button color="primary">Primary</button>
-    <button mat-stroked-button color="accent">Accent</button>
-    <button mat-stroked-button color="warn">Warn</button>
-    <button mat-stroked-button disabled>Disabled</button>
-    <a mat-stroked-button href="https://www.google.com/" target="_blank">Link</a>
-  </div>
-</section>
-<mat-divider></mat-divider>
-<section>
-  <div class="example-label">Flat</div>
-  <div class="example-button-row">
-    <button mat-flat-button>Basic</button>
-    <button mat-flat-button color="primary">Primary</button>
-    <button mat-flat-button color="accent">Accent</button>
-    <button mat-flat-button color="warn">Warn</button>
-    <button mat-flat-button disabled>Disabled</button>
-    <a mat-flat-button href="https://www.google.com/" target="_blank">Link</a>
-  </div>
-</section>
-<mat-divider></mat-divider>
-<section>
-  <div class="example-label">Icon</div>
-  <div class="example-button-row">
-    <div class="example-flex-container">
-      <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-        <mat-icon>home</mat-icon>
-      </button>
-      <button mat-icon-button color="accent" aria-label="Example icon button with a menu icon">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
-        <mat-icon>favorite</mat-icon>
-      </button>
-      <button mat-icon-button disabled aria-label="Example icon button with a open in new tab icon">
-        <mat-icon>open_in_new</mat-icon>
-      </button>
+<h2>Assignments</h2>
+<p>Find all your assignments and complete before ending</p>
+<hr>
+<div class="assignments-page-container">
+  <div *ngFor="let assignmentItem of assignments" class="assignment-item">
+    <div class="left-container">
+      <div class="assignment-icon-container">
+        <img class="assignment-icon" src="../../../assets/images/test.png" alt="">
+      </div>
+      <div class="title">
+        <h4>{{ assignmentItem.assignment.title }}</h4>
+        <div *ngIf="assignmentItem.assignment.dueDate.toDate() < currentDate" class="assignment-label warn">
+          <span>Expired</span>
+        </div>
+        <div *ngIf="assignmentItem.assignment.dueDate.toDate() > currentDate && !assignmentItem.assignment.isGraded" class="assignment-label info">
+          <span>Open</span>
+        </div>
+        <div *ngIf="assignmentItem.assignment.dueDate.toDate() > currentDate && assignmentItem.assignment.isGraded" class="assignment-label graded">
+          <span>Graded</span>
+        </div>
+      </div>
+      <p>Posted: {{ assignmentItem.assignment.createdDate.toDate() | date: 'yyyy MMMM dd' }}</p>
+      <div class="class-info">
+        <span>Class: </span>
+        <span class="class-title"> {{ assignmentItem.classTitle }} </span>
+      </div>
+      <div class="due-date">
+        <span>Due date: </span>
+        <span style="font-weight: 500;"> {{ assignmentItem.assignment.dueDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
+      </div>
     </div>
-  </div>
-</section>
-<mat-divider></mat-divider>
-<section>
-  <div class="example-label">FAB</div>
-  <div class="example-button-row">
-    <div class="example-flex-container">
-      <div class="example-button-container">
-        <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <div class="example-button-container">
-        <button mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
-          <mat-icon>bookmark</mat-icon>
-        </button>
-      </div>
-      <div class="example-button-container">
-        <button mat-fab color="warn" aria-label="Example icon button with a home icon">
-          <mat-icon>home</mat-icon>
-        </button>
-      </div>
-      <div class="example-button-container">
-        <button mat-fab disabled aria-label="Example icon button with a heart icon">
-          <mat-icon>favorite</mat-icon>
-        </button>
+    <div class="right-container">
+      <button *ngIf="assignmentItem.isTeacher" mat-raised-button (click)="gradeAssignment(assignmentItem.assignment)">Grade Assignment</button>
+      <button *ngIf="!assignmentItem.isTeacher && assignmentItem.assignment.dueDate.toDate() > currentDate && !assignmentItem.submitted" mat-raised-button
+        (click)="solveAssignment(assignmentItem.assignment)">Solve Assignment</button>
+      <button *ngIf="!assignmentItem.isTeacher && assignmentItem.submitted && !assignmentItem.assignment.isGraded" mat-raised-button disabled>Submitted</button>
+      <div *ngIf="!assignmentItem.isTeacher && assignmentItem.submitted && assignmentItem.assignment.isGraded">
+        <span class="grade">Grade: {{ assignmentItem.grade | number:'1.2-2' }} / 10</span>
       </div>
     </div>
   </div>
-</section>
-<mat-divider></mat-divider>
-<section>
-  <div class="example-label">Mini FAB</div>
-  <div class="example-button-row">
-    <div class="example-flex-container">
-      <div class="example-button-container">
-        <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </div>
-      <div class="example-button-container">
-        <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-          <mat-icon>plus_one</mat-icon>
-        </button>
-      </div>
-      <div class="example-button-container">
-        <button mat-mini-fab color="warn" aria-label="Example icon button with a filter list icon">
-          <mat-icon>filter_list</mat-icon>
-        </button>
-      </div>
-      <div class="example-button-container">
-        <button mat-mini-fab disabled aria-label="Example icon button with a home icon">
-          <mat-icon>home</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
+</div>

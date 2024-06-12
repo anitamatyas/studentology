@@ -10,7 +10,7 @@ import { convertSnap, convertSnaps } from "./db-utils";
 import { UserService } from "./user.service";
 import firebase from 'firebase/compat/app';
 import { DialogService } from "./dialog.service";
-import { Test } from "../interfaces/test.interface";
+import { Assignment, Test } from "../interfaces/test.interface";
 
 // Define a color palette and a function to get a random color
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
@@ -284,6 +284,15 @@ export class ClassService {
                 );
             })
         );
+    }
+
+    addAssignment(assignment: Assignment): Promise<void> {
+        const assignmentCollection = this.firestore.collection<Assignment>('assignments');
+        const assignmentToSave = {
+            ...assignment,
+            dueDate: assignment.dueDate
+        };
+        return assignmentCollection.add(assignmentToSave).then();
     }
 
     getClassTitleById(classId: string): Observable<string> {

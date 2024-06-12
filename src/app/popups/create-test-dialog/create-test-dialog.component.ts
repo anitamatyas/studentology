@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ClassService } from '../../services/class.service';
 import { ActivatedRoute } from '@angular/router';
 import { Group } from '../../interfaces/class.interface';
@@ -16,24 +16,32 @@ export class CreateTestDialogComponent implements OnInit {
   groups: Group[] = [];
   selectedClassId: string;
   points = Array.from({ length: 10 }, (_, i) => i + 1);
+  isAssignment: boolean;
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CreateTestDialogComponent>,
     private classService: ClassService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    @Inject(MAT_DIALOG_DATA) public data: { isAssignment: boolean }
+  )
+  { }
 
   ngOnInit(): void {
     this.selectedClassId = this.route.snapshot.paramMap.get('id');
+    this.isAssignment = this.data.isAssignment || false;
 
     this.testForm = this.fb.group({
       title: ['', Validators.required],
+      description: this.isAssignment ? [''] : undefined,
       dueDate: ['', Validators.required],
       isForGroup: [{ value: false, disabled: true }],
-      groupId: [''],
-      questions: this.fb.array([this.createQuestion()])
+      groupId: ['']
     });
+
+    if (!this.isAssignment) {
+      this.testForm.addControl('questions', this.fb.array([this.createQuestion()]));
+    }
 
     this.classService.getGroups(this.selectedClassId).subscribe(groups => {
       this.groups = groups;

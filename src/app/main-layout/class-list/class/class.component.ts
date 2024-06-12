@@ -14,8 +14,8 @@ import { CreateTestDialogComponent } from '../../../popups/create-test-dialog/cr
 import { AddMemberDialogComponent } from '../../../popups/add-member-dialog/add-member-dialog.component';
 import { DialogService } from '../../../services/dialog.service';
 import { EditNameDialogComponent } from '../../../popups/edit-name-dialog/edit-name-dialog.component';
-import { Test } from '../../../interfaces/test.interface';
-import { Timestamp } from 'firebase/firestore';
+import { Assignment, Test } from '../../../interfaces/test.interface';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-class',
@@ -154,6 +154,38 @@ export class ClassComponent  implements OnInit, OnDestroy {
           this.dialogService.showInfoDialog('Success', 'Test created successfully');
         }).catch(error => {
           this.dialogService.showInfoDialog('Error', `Failed to create test: ${error.message}`);
+        });
+      }
+    });
+  }
+
+  openCreateAssignmentDialog(): void {
+    const dialogRef = this.dialog.open(CreateTestDialogComponent, {
+      width: '80%',
+      height: '90%',
+      data: { isAssignment: true }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const newAssignment : Assignment = {
+          classId: this.selectedClassId,
+          createdBy: this.user.id,
+          createdDate: new Timestamp(Math.floor(Date.now() / 1000), 0),
+          dueDate: result.dueDate,
+          groupId: result.isForGroup ? result.groupId : null,
+          isForGroup: result.isForGroup,
+          isGraded: false,
+          title: result.title,
+          description: result.description
+        };
+
+        console.log(result);
+
+        this.classService.addAssignment(newAssignment).then(() => {
+          this.dialogService.showInfoDialog('Success', 'Assignment created successfully');
+        }).catch(error => {
+          this.dialogService.showInfoDialog('Error', `Failed to create assignment: ${error.message}`);
         });
       }
     });

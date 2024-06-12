@@ -13,6 +13,19 @@ export interface Test {
     parsedTestContent?: TestContent;
 }
 
+export interface Assignment {
+    id?: string;
+    title: string;
+    description: string;
+    classId: string;
+    createdBy: string;
+    isForGroup: boolean;
+    groupId?: string;
+    dueDate: Timestamp;
+    createdDate: Timestamp;
+    isGraded: boolean;
+}
+
 export interface TestContent {
     title: string;
     questions: {

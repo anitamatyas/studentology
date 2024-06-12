@@ -15,7 +15,7 @@ export class PostService {
 
     getPosts(classId: string): Observable<Post[]> {
         return this.firestore
-            .collection('posts', ref => ref.where('classId', '==', classId))
+            .collection('posts', ref => ref.where('classId', '==', classId).orderBy('createdDate', 'asc'))
             .snapshotChanges()
             .pipe(
                 map(result => convertSnaps<Post>(result)))

@@ -35,10 +35,10 @@ export class ClassListComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.classesSubscription = this.classService.getClasses().subscribe(classes => {
+    this.signedInUser = this.authService.getSignedInUser();
+    this.classesSubscription = this.classService.getClassesForUser(this.signedInUser.id).subscribe(classes => {
       this.classList = classes;
     });
-    this.signedInUser = this.authService.getSignedInUser();
   }
 
   navigateToClass(classItem: Class){

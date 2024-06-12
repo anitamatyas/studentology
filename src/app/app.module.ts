@@ -50,6 +50,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { CreateClassDialogComponent } from './popups/create-class-dialog/create-class-dialog.component';
 import { SolveTestComponent } from './main-layout/tests/solve-test/solve-test.component';
 import { ConfirmDialogComponent } from './popups/confirm-dialog/confirm-dialog.component';
+import { GradesDialogComponent } from './popups/grades-dialog/grades-dialog.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { ConfirmDialogComponent } from './popups/confirm-dialog/confirm-dialog.c
     EditNameDialogComponent,
     CreateClassDialogComponent,
     SolveTestComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    GradesDialogComponent
   ],
   imports: [
     BrowserModule,

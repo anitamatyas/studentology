@@ -23,6 +23,10 @@
     p, span {
         font-size: .8em;
         margin: 0;
+
+        &.grade {
+            font-size: 1.4em;
+        }
     }
 
     .left-container {
@@ -92,6 +96,10 @@
 
         &.info {
             background-color: var(--tertiary);
+        }
+
+        &.graded {
+            background-color: rgb(105, 152, 105);
         }
     }
 }
