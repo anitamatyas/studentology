@@ -39,10 +39,6 @@ exports.scheduleEmailReminders = functions.pubsub.schedule('0 0 * * *').timeZone
     const startOfDay = new Date(oneDayFromNow.setHours(0, 0, 0, 0));
     const endOfDay = new Date(oneDayFromNow.setHours(23, 59, 59, 999));
 
-    console.log(oneDayFromNow);
-    console.log(startOfDay);
-    console.log(endOfDay);
-
     const testsSnapshot = await db.collection('tests')
         .where('dueDate', '>=', admin.firestore.Timestamp.fromDate(startOfDay))
         .where('dueDate', '<=', admin.firestore.Timestamp.fromDate(endOfDay))
@@ -53,8 +49,6 @@ exports.scheduleEmailReminders = functions.pubsub.schedule('0 0 * * *').timeZone
         .where('dueDate', '<=', admin.firestore.Timestamp.fromDate(endOfDay))
         .get();
 
-    console.log(testsSnapshot);
-    console.log(assignmentsSnapshot);
 
     const tests: Test[] = testsSnapshot.docs.map((doc: { id: any; data: () => any; }) => ({ id: doc.id, ...doc.data() }));
     const assignments: Assignment[] = assignmentsSnapshot.docs.map((doc: { id: any; data: () => any; }) => ({ id: doc.id, ...doc.data() }));

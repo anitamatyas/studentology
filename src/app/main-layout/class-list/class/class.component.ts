@@ -197,8 +197,6 @@ export class ClassComponent  implements OnInit, OnDestroy {
       data: { groupId: groupId, classId: this.selectedClassId }
     });
 
-    console.log('groupId', groupId);
-
     dialogRef.afterClosed().subscribe(userId => {
       if (userId) {
         this.classService.addMemberToClassAndGroup(this.selectedClassId, userId, groupId).pipe(take(1)).subscribe({

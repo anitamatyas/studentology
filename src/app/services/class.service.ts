@@ -98,24 +98,25 @@ export class ClassService {
         // Check if the user is already a member
         const memberQuery = membersCollection.ref.where('userId', '==', userId).limit(1);
 
-        return from(memberQuery.get()).pipe(
-            switchMap(snapshot => {
-                if (!snapshot.empty) {
-                    // User is already a member, update the groupId
-                    const memberDocId = snapshot.docs[0].id;
-                    return from(membersCollection.doc(memberDocId).update({ groupId }));
-                } else {
-                    // User is not a member, proceed with adding the member
-                    const newMember = {
-                        userId: userId,
-                        memberRole: 'student',
-                        groupId: groupId
-                    };
+        return from(this.userService.getEmailByUserId(userId)).pipe(
+            switchMap(email => from(memberQuery.get()).pipe(
+                switchMap(snapshot => {
+                    if (!snapshot.empty) {
+                        const memberDocId = snapshot.docs[0].id;
+                        return from(membersCollection.doc(memberDocId).update({ groupId }));
+                    } else {
+                        const newMember = {
+                            userId: userId,
+                            memberRole: 'student',
+                            groupId: groupId,
+                            email: email
+                        };
 
-                    const memberRef = membersCollection.doc();
-                    return from(memberRef.set(newMember));
-                }
-            }),
+                        const memberRef = membersCollection.doc();
+                        return from(memberRef.set(newMember));
+                    }
+                })
+            )),
             catchError(error => {
                 console.log(error);
                 return throwError(error);

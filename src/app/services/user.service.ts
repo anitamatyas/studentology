@@ -48,4 +48,25 @@ export class UserService {
             })
         );
     }
+
+    getEmailByUserId(userId: string): Observable<string> {
+        return this.firestore
+            .collection<User>('users')
+            .doc(userId)
+            .snapshotChanges()
+            .pipe(
+                map(action => {
+                    const data = action.payload.data() as User;
+                    if (data) {
+                        return data.email;
+                    } else {
+                        throw new Error('User not found');
+                    }
+                }),
+                catchError(error => {
+                    console.error('Failed to get user email', error);
+                    throw error;
+                })
+            );
+    }
 }
