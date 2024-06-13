@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="right-container">
-      <button *ngIf="testItem.isTeacher && !testItem.test.isGraded" mat-raised-button (click)="gradeTest(testItem.test)">Grade Test</button>
+      <button *ngIf="testItem.isTeacher && !testItem.test.isGraded" mat-raised-button (click)="gradeTest(testItem.test)" [disabled]="testItem.submissionCount === 0">Grade Test</button>
       <button *ngIf="testItem.isTeacher && testItem.test.isGraded" mat-raised-button (click)="openGradesDialog(testItem.test)">See grades</button>
       <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.submitted" mat-raised-button
         (click)="solveTest(testItem.test)">Solve Test</button>

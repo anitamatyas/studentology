@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { Class, Group, Member } from "../interfaces/class.interface";
 import { Post } from "../interfaces/post.interface";
-import { BehaviorSubject, Observable, catchError, combineLatest, exhaustMap, forkJoin, from, map, switchMap, take, throwError } from "rxjs";
+import { BehaviorSubject, Observable, catchError, combineLatest, exhaustMap, forkJoin, from, map, of, switchMap, take, throwError } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Firestore } from "@angular/fire/firestore";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
@@ -9,6 +9,7 @@ import { AuthService } from "./auth.service";
 import { convertSnap, convertSnaps } from "./db-utils";
 import { UserService } from "./user.service";
 import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import { DialogService } from "./dialog.service";
 import { Assignment, Test } from "../interfaces/test.interface";
 
@@ -92,7 +93,7 @@ export class ClassService {
         const classDoc = this.firestore.doc(`classes/${classId}`);
         const membersCollection = classDoc.collection('members');
 
-        console.log('Adding member!!!');
+        console.log('Adding or updating member!!!');
 
         // Check if the user is already a member
         const memberQuery = membersCollection.ref.where('userId', '==', userId).limit(1);
@@ -100,8 +101,9 @@ export class ClassService {
         return from(memberQuery.get()).pipe(
             switchMap(snapshot => {
                 if (!snapshot.empty) {
-                    // User is already a member
-                    return throwError(new Error('User is already a member of this class.'));
+                    // User is already a member, update the groupId
+                    const memberDocId = snapshot.docs[0].id;
+                    return from(membersCollection.doc(memberDocId).update({ groupId }));
                 } else {
                     // User is not a member, proceed with adding the member
                     const newMember = {
@@ -111,21 +113,11 @@ export class ClassService {
                     };
 
                     const memberRef = membersCollection.doc();
-                    const memberId = memberRef.ref.id;
-
-                    return from(memberRef.set(newMember).then(() => {
-                        if (groupId !== 'ungrouped') {
-                            const groupsCollection = classDoc.collection('groups');
-                            const groupDoc = groupsCollection.doc(groupId);
-                            return groupDoc.update({
-                                members: firebase.firestore.FieldValue.arrayUnion(memberId)
-                            });
-                        }
-                        return Promise.resolve();
-                    }));
+                    return from(memberRef.set(newMember));
                 }
             }),
             catchError(error => {
+                console.log(error);
                 return throwError(error);
             })
         );

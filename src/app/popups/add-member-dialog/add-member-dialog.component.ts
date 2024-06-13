@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ClassService } from '../../services/class.service';
 import { DialogService } from '../../services/dialog.service';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -37,15 +36,7 @@ export class AddMemberDialogComponent {
     this.userService.getUserByEmail(email).subscribe({
       next: user => {
         if (user) {
-          this.classService.addMemberToClassAndGroup(this.data.classId, user.id, this.data.groupId).pipe(take(1)).subscribe({
-            next: () => {
-              this.dialogService.showInfoDialog('Success', 'Member successfully added to the class.');
-              this.dialogRef.close();
-            },
-            error: (error) => {
-              this.dialogService.showInfoDialog('Error', error.message);
-            }
-          });
+          this.dialogRef.close(user.id);
         } else {
           this.errorMessage = 'User not found';
         }

@@ -17,6 +17,7 @@ export interface Member {
     userId: string;
     memberRole: string;
     users?: User[];
+    email?: string;
     groupId?: string;
 }
 

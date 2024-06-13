@@ -61,7 +61,8 @@ export class TestsComponent implements OnInit, OnDestroy {
                         classTitle: classTitles[test.classId],
                         isTeacher: role === 'teacher',
                         submitted: submitted,
-                        grade: grade
+                        grade: grade,
+                        submissionCount: submissions.length
                       };
                     })
                   );

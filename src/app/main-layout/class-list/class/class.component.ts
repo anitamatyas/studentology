@@ -192,9 +192,24 @@ export class ClassComponent  implements OnInit, OnDestroy {
   }
 
   openAddMemberDialog(groupId: string) {
-    this.dialog.open(AddMemberDialogComponent, {
+    const dialogRef = this.dialog.open(AddMemberDialogComponent, {
       width: '400px',
       data: { groupId: groupId, classId: this.selectedClassId }
+    });
+
+    console.log('groupId', groupId);
+
+    dialogRef.afterClosed().subscribe(userId => {
+      if (userId) {
+        this.classService.addMemberToClassAndGroup(this.selectedClassId, userId, groupId).pipe(take(1)).subscribe({
+          next: () => {
+            this.dialogService.showInfoDialog('Success', 'Member successfully added to the class.');
+          },
+          error: (error) => {
+            this.dialogService.showInfoDialog('Error', error.message);
+          }
+        });
+      }
     });
   }
 
