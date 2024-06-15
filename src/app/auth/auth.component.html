@@ -13,11 +13,9 @@
     </div>
     <div class="right-column">
         <div class="login-wrapper">
-            <h2>{{ isSignUp ? 'Sign up' : 'Log in' }} as a {{ isStudent ? 'student' : 'teacher' }}</h2>
-            <div class="logo-wrapper">
-                <img class="google-logo" src="/assets/images/google.png">
-            </div>
-            <p id="email-instruction" class="form-text text-muted">Or use your email to sign in</p>
+            <h2 *ngIf="isSignUp">Sign up as a {{ isStudent ? 'student' : 'teacher' }}</h2>
+            <h2 *ngIf="!isSignUp">Log in as a student or teacher</h2>
+            <p id="email-instruction" class="form-text text-muted">Use your email to sign up or log in</p>
             <div class="login-form">
                 <form class="login-form" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
                 <div class="form-group">
@@ -56,10 +54,6 @@
                     <small *ngIf="passwordInput.errors.required">Password is required.</small>
                     <small *ngIf="passwordInput.errors.minlength">Password must be at least 6 characters long.</small>
                 </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Remember me</label>
-                </div>
                 <div class="login-error" *ngIf="error">
                     <p class="text-danger">{{ error }}</p>
                 </div>
@@ -67,21 +61,16 @@
                     <span *ngIf="isSignUp">SIGN UP</span>
                     <span *ngIf="!isSignUp">SIGN IN</span>
                 </button>
-                <div *ngIf="!isSignUp && isStudent" class="sign-up-text">
-                    <small>Don't have a student account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up</small><br>
-                    <small>Are you a teacher? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as teacher</small>
+                <div *ngIf="!isSignUp" class="sign-up-text">
+                    <small>Don't have an account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up</small><br>
                 </div>
                 <div *ngIf="isSignUp && isStudent" class="sign-up-text">
-                    <small>Already have a student account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Log in</small><br>
-                    <small>Are you a teacher? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as a teacher</small>
-                </div>
-                <div *ngIf="!isSignUp && !isStudent" class="sign-up-text">
-                    <small>Don't have a teacher account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up</small><br>
-                    <small>Are you a student? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as student</small>
+                    <small>Already have an account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Log in</small><br>
+                    <small>Are you a teacher? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up as a teacher</small>
                 </div>
                 <div *ngIf="isSignUp && !isStudent" class="sign-up-text">
-                    <small>Already have a teacher account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Log in</small><br>
-                    <small>Are you a student? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Login as a student</small>
+                    <small>Already have an account? </small><small (click)="switchAuth()" style="font-style: italic; color: #F31559; cursor: pointer;">Log in</small><br>
+                    <small>Are you a student? </small><small (click)="switchMode()" style="font-style: italic; color: #F31559; cursor: pointer;">Sign up a student</small>
                 </div>
                 </form>
             </div>

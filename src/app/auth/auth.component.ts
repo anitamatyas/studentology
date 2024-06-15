@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss'
+  styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
   isStudent = true;
@@ -36,10 +36,17 @@ export class AuthComponent {
     }
     const email = form.value.email;
     const password = form.value.password;
+    const confirmPassword = form.value.confirmPassword;
     this.isLoading = true;
     const role = this.isStudent ? 'student' : 'teacher';
 
-    let authObs;
+    if (this.isSignUp && password !== confirmPassword) {
+      this.error = 'Passwords do not match';
+      this.isLoading = false;
+      return;
+    }
+
+    let authObs: Observable<any>;
 
     if (this.isSignUp) {
       authObs = from(this.authService.signUp(email, password, role));
@@ -50,11 +57,9 @@ export class AuthComponent {
     authObs.subscribe(
       () => {
         this.isLoading = false;
-        console.log('[ROUTER] - Navigating to classes after auth');
         this.router.navigate(['home/classes']);
       },
       errorMessage => {
-        console.log(errorMessage);
         this.error = errorMessage;
         this.isLoading = false;
       }

@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     font-style: normal;
-    padding: 4em;
+    padding: 2em;
 
     @media (min-width: 768px) {
         height: 100vh;
@@ -81,7 +81,7 @@
 }
 
 h2 {
-    font-size: 2em;
+    font-size: 1.7em;
     text-align: center;
     font-weight: 300;
     color: #565656;
@@ -107,24 +107,6 @@ h2 {
 
     @media (max-width: 768px) {
         margin-block: 3em;
-    }
-}
-
-.logo-wrapper {
-    display: flex;
-    margin: 0 auto;
-    width: 2.6em;
-    height: 2.6em;
-    border: 2px solid lightgray;
-    border-radius: 6px;
-    align-items: center;
-
-    .google-logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 1.2em;
-        width: 1.2em;
     }
 }
 
