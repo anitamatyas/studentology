@@ -1,0 +1,160 @@
+@include mat.core();
+
+//THEME 1
+$theme1-primary-palette: (
+    50: #f3e9fd,
+    100: #e0c6fa,
+    200: #c9a2f6,
+    300: #b27df2,
+    400: #9d5bed,
+    500: #7469B6,
+    600: #5e429a,
+    700: #4a247d,
+    800: #370f61,
+    900: #250946,
+    contrast: (50: black,
+        100: black,
+        200: black,
+        300: black,
+        400: black,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+    )
+);
+
+.theme1 {
+
+$studentology-primary: mat.define-palette($theme1-primary-palette);
+$studentology-accent: mat.define-palette($theme1-primary-palette, 700, 800, 900);
+$studentology-warn: mat.define-palette(mat.$red-palette);
+
+$studentology-theme: mat.define-light-theme((color: (primary: $studentology-primary,
+                accent: $studentology-accent,
+                warn: $studentology-warn,
+            ),
+            typography: mat.define-typography-config(),
+            density: 0));
+
+@include mat.all-component-themes($studentology-theme);
+
+}
+
+//THEME 2
+
+$theme2-primary-palette: (
+    50: #fcebe9,
+    100: #f8c8c4,
+    200: #f3a19d,
+    300: #ee7974,
+    400: #ea574f,
+    500: #A94438,
+    600: #db281e,
+    700: #c12216,
+    800: #a71c0e,
+    900: #7a1304,
+    contrast: (50: black,
+        100: black,
+        200: black,
+        300: black,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+    )
+);
+
+.theme2 {
+    $studentology-primary: mat.define-palette($theme2-primary-palette);
+    $studentology-accent: mat.define-palette($theme2-primary-palette, 700, 800, 900);
+    $studentology-warn: mat.define-palette(mat.$red-palette);
+
+    $studentology-theme: mat.define-light-theme((color: (primary: $studentology-primary,
+                    accent: $studentology-accent,
+                    warn: $studentology-warn,
+                )));
+
+    @include mat.all-component-themes($studentology-theme);
+}
+
+//THEME 3
+
+$theme3-primary-palette: (
+    50: #e9f3eb,
+    100: #c6dfcb,
+    200: #a1caa9,
+    300: #7ab487,
+    400: #58a36e,
+    500: #4F6F52,
+    600: #3a7c3e,
+    700: #29712e,
+    800: #18661e,
+    900: #055c0e,
+    contrast: (50: black,
+        100: black,
+        200: black,
+        300: black,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+    )
+);
+
+.theme3 {
+    $studentology-primary: mat.define-palette($theme3-primary-palette);
+    $studentology-accent: mat.define-palette($theme3-primary-palette, 700, 800, 900);
+    $studentology-warn: mat.define-palette(mat.$red-palette);
+
+    $studentology-theme: mat.define-light-theme((color: (primary: $studentology-primary,
+                    accent: $studentology-accent,
+                    warn: $studentology-warn,
+                )));
+
+    @include mat.all-component-themes($studentology-theme);
+}
+
+//THEME 4
+
+$theme4-primary-palette: (
+    50: #e0eaf0,
+    100: #b3c7da,
+    200: #80a0c1,
+    300: #4c78a6,
+    400: #245a92,
+    500: #164863,
+    600: #113a52,
+    700: #0d2c41,
+    800: #091f30,
+    900: #04131f,
+    contrast: (50: black,
+        100: black,
+        200: black,
+        300: black,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+    )
+);
+
+.theme4 {
+    $studentology-primary: mat.define-palette($theme4-primary-palette);
+    $studentology-accent: mat.define-palette($theme4-primary-palette, 700, 800, 900);
+    $studentology-warn: mat.define-palette(mat.$red-palette);
+
+    $studentology-theme: mat.define-light-theme((color: (primary: $studentology-primary,
+                    accent: $studentology-accent,
+                    warn: $studentology-warn,
+                )));
+
+    @include mat.all-component-themes($studentology-theme);
+}

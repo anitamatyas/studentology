@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, Renderer2, inject } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { AuthService } from './services/auth.service';
+import { ThemeService } from './services/themes.service';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,20 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit{
   title = 'studentology';
+  currentTheme: string;
 
-  constructor(private authService: AuthService) {
-
+  constructor(private authService: AuthService, private renderer: Renderer2, private themeService: ThemeService) {
+    //this.renderer.addClass(document.documentElement, 'theme2');
   }
 
   ngOnInit() {
+    this.themeService.theme$.subscribe(themeName => {
+      if (this.currentTheme) {
+        this.renderer.removeClass(document.body, this.currentTheme);
+      }
+      this.currentTheme = themeName;
+      this.renderer.addClass(document.body, themeName);
+    });
     this.authService.autoLogin();
   }
 }

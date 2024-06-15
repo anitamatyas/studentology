@@ -15,11 +15,20 @@ mat-toolbar {
     @media (max-width: 480px) {
         padding: 0;
     }
-    background-image:  url('../../assets/images/layered-waves-haikei-7.svg');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
+}
+
+.nav-content::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 mat-sidenav-container {

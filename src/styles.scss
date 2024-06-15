@@ -1,48 +1,6 @@
 @use '@angular/material' as mat;
 
-@include mat.core();
-
-$theme1-primary-palette: (
-  50: #f3e9fd,
-  100: #e0c6fa,
-  200: #c9a2f6,
-  300: #b27df2,
-  400: #9d5bed,
-  500: #7469B6, // Main primary color
-  600: #5e429a,
-  700: #4a247d,
-  800: #370f61,
-  900: #250946,
-  contrast: (
-    50: black,
-    100: black,
-    200: black,
-    300: black,
-    400: black,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-  )
-);
-
-$studentology-primary: mat.define-palette($theme1-primary-palette);
-$studentology-accent: mat.define-palette($theme1-primary-palette, 700, 800, 900);
-$studentology-warn: mat.define-palette(mat.$red-palette);
-
-$studentology-theme: mat.define-light-theme((
-  color: (
-    primary: $studentology-primary,
-    accent: $studentology-accent,
-    warn: $studentology-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0
-));
-
-
-@include mat.all-component-themes($studentology-theme);
+@import './themes.scss';
 
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
