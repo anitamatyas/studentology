@@ -10,7 +10,7 @@
       <input matInput formControlName="subTitle">
     </mat-form-field>
     <div class="color-picker">
-      <div *ngFor="let color of colors" class="color-circle" [ngStyle]="{'background-color': color}" (click)="selectColor(color)" [class.selected]="color === selectedColor"></div>
+      <div *ngFor="let color of colors" class="color-circle" [ngStyle]="{'background-color': color.value}" (click)="selectColor(color.name)" [class.selected]="color.name === selectedColor"></div>
     </div>
   </form>
 </div>

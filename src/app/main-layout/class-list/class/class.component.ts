@@ -311,6 +311,20 @@ export class ClassComponent  implements OnInit, OnDestroy {
       });
   }
 
+  getBackgroundColor(imagePath: string): string {
+    const styles = getComputedStyle(document.documentElement);
+    switch(imagePath) {
+      case 'primary':
+        return styles.getPropertyValue('--primary').trim();
+      case 'secondary':
+        return styles.getPropertyValue('--secondary').trim();
+      case 'tertiary':
+        return styles.getPropertyValue('--tertiary').trim();
+      default:
+        return '#fff';
+    }
+  }
+
   ngOnDestroy() {
     if (this.postsSubscription) this.postsSubscription.unsubscribe();
     if (this.classMemberSubscription) this.classMemberSubscription.unsubscribe();

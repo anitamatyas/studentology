@@ -1,6 +1,6 @@
 <div class="class-container">
   <ng-container *ngIf="selectedClass && classOwner">
-    <div class="header" [ngStyle]="{background: selectedClass.imagePath}">
+    <div class="header" [ngStyle]="{background: getBackgroundColor(selectedClass.imagePath)}">
       <h2>{{ selectedClass.title }}</h2>
       <button class="edit-class-btn" *ngIf="isTeacherInClass" mat-icon-button color="white"
         (click)="openEditClassNameDialog(selectedClass.title)"><mat-icon>edit</mat-icon></button>

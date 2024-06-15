@@ -14,12 +14,23 @@ export class ClassItemComponent  implements OnInit {
   @Input() class: Class;
   classOwner: Observable<User>;
   membersCount: Observable<number>;
+  backgroundColor: string;
 
   constructor(private userService: UserService, private classService: ClassService) { }
 
   ngOnInit() {
     this.classOwner = this.userService.getUserById(this.class.owner);
     this.membersCount = this.classService.getClassMembersLength(this.class.id);
+    this.setBackgroundColor(this.class.imagePath);
+  }
+
+  private setBackgroundColor(imagePath: string) {
+    const colorMap = {
+      primary: 'var(--primary)',
+      secondary: 'var(--secondary)',
+      tertiary: 'var(--tertiary)'
+    };
+    this.backgroundColor = colorMap[imagePath] || 'transparent';
   }
 
 }

@@ -10,7 +10,7 @@ import { User } from '../../interfaces/user.interface';
 })
 export class CreateClassDialogComponent implements OnInit {
   createClassForm: FormGroup;
-  colors: string[] = [];
+  colors: {name: string, value: string}[] = [];
   selectedColor: string;
 
   constructor(
@@ -27,16 +27,16 @@ export class CreateClassDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.colors = this.getColorsFromStyles();
-    this.selectedColor = this.colors[0];
+    this.selectedColor = this.colors[0].name;
     this.createClassForm.patchValue({ color: this.selectedColor });
   }
 
-  getColorsFromStyles(): string[] {
+  getColorsFromStyles(): {name: string, value: string}[] {
     const styles = getComputedStyle(document.documentElement);
     return [
-      styles.getPropertyValue('--primary').trim(),
-      styles.getPropertyValue('--secondary').trim(),
-      styles.getPropertyValue('--tertiary').trim()
+      { name: 'primary', value: styles.getPropertyValue('--primary').trim() },
+      { name: 'secondary', value: styles.getPropertyValue('--secondary').trim() },
+      { name: 'tertiary', value: styles.getPropertyValue('--tertiary').trim() }
     ];
   }
 
