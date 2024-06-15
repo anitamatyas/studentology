@@ -28,7 +28,7 @@ app-class-item, .add-item {
     padding: 20px;
     background-color: rgba(255, 255, 255, .55);
     backdrop-filter: blur(4px);
-    box-shadow: 0px 0px 4px 1px #efcaca;
+    box-shadow: 0px 0px 4px 1px var(--tertiary);
     border: 1px solid var(--lightgray);
     border-radius: 10px;
     color: black;
