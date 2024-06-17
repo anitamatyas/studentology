@@ -1,43 +1,80 @@
-<h2>Tests</h2>
-<p>Find all your tests and complete before ending</p>
-<hr>
-<div class="tests-page-container">
-  <div *ngFor="let testItem of tests" class="test-item">
-    <div class="left-container">
-      <div class="test-icon-container">
-        <img class="test-icon" src="../../../assets/images/test.png" alt="">
-      </div>
-      <div class="title">
-        <h4>{{ testItem.test.parsedTestContent.title }}</h4>
-        <div *ngIf="testItem.test.dueDate.toDate() < currentDate" class="test-label warn">
-          <span>Expired</span>
-        </div>
-        <div *ngIf="testItem.test.dueDate.toDate() > currentDate && !testItem.test.isGraded" class="test-label info">
-          <span>Open</span>
-        </div>
-        <div *ngIf="testItem.test.dueDate.toDate() > currentDate && testItem.test.isGraded" class="test-label graded">
-          <span>Graded</span>
+<div class="test-page-container">
+  <h2>Tests</h2>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner [color]="primary"></mat-spinner>
+    <p>Loading...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div *ngIf="loggedInUser && loggedInUser.role === 'student'" class="statistics">
+      <div>
+        <h5>Test Submission Status</h5>
+        <div style="display: block;">
+          <canvas baseChart width="400" height="200" [data]="doughnutChartData" [type]="doughnutChartType"
+            [options]="doughnutChartOptions">
+          </canvas>
         </div>
       </div>
-      <p>Posted: {{ testItem.test.createdDate.toDate() | date: 'yyyy MMMM dd' }}</p>
-      <div class="class-info">
-        <span>Class: </span>
-        <span class="class-title"> {{ testItem.classTitle }} </span>
-      </div>
-      <div class="due-date">
-        <span>Due date: </span>
-        <span style="font-weight: 500;"> {{ testItem.test.dueDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
+
+      <div>
+        <h5>Average Grades by Classes</h5>
+        <div style="display: block;">
+          <canvas baseChart width="500" height="200" [data]="barChartData" [type]="barChartType"
+            [options]="barChartOptions">
+          </canvas>
+        </div>
       </div>
     </div>
-    <div class="right-container">
-      <button *ngIf="testItem.isTeacher && !testItem.test.isGraded" mat-raised-button (click)="gradeTest(testItem.test)" [disabled]="testItem.submissionCount === 0">Grade Test</button>
-      <button *ngIf="testItem.isTeacher && testItem.test.isGraded" mat-raised-button (click)="openGradesDialog(testItem.test)">See grades</button>
-      <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.submitted" mat-raised-button
-        (click)="solveTest(testItem.test)">Solve Test</button>
-      <button *ngIf="!testItem.isTeacher && testItem.submitted && !testItem.test.isGraded" mat-raised-button disabled>Submitted</button>
-      <div *ngIf="!testItem.isTeacher && testItem.submitted && testItem.test.isGraded">
-        <span class="grade">Grade: {{ testItem.grade | number:'1.2-2' }} / 10</span>
+
+
+    <hr>
+    <div class="tests-container">
+      <div *ngFor="let testItem of tests" class="test-item">
+        <div class="left-container">
+          <div class="test-icon-container">
+            <img class="test-icon" src="../../../assets/images/test.png" alt="">
+          </div>
+          <div class="title">
+            <h4>{{ testItem.test.parsedTestContent.title }}</h4>
+            <div *ngIf="testItem.test.dueDate.toDate() < currentDate" class="test-label warn">
+              <span>Expired</span>
+            </div>
+            <div *ngIf="testItem.test.dueDate.toDate() > currentDate && !testItem.test.isGraded"
+              class="test-label info">
+              <span>Open</span>
+            </div>
+            <div *ngIf="testItem.test.dueDate.toDate() > currentDate && testItem.test.isGraded"
+              class="test-label graded">
+              <span>Graded</span>
+            </div>
+          </div>
+          <p>Posted: {{ testItem.test.createdDate.toDate() | date: 'yyyy MMMM dd' }}</p>
+          <div class="class-info">
+            <span>Class: </span>
+            <span class="class-title"> {{ testItem.classTitle }} </span>
+          </div>
+          <div class="due-date">
+            <span>Due date: </span>
+            <span style="font-weight: 500;"> {{ testItem.test.dueDate.toDate() | date: 'yyyy MMMM dd hh:mm' }} </span>
+          </div>
+        </div>
+        <div class="right-container">
+          <button *ngIf="testItem.isTeacher && !testItem.test.isGraded" mat-raised-button
+            (click)="gradeTest(testItem.test)" [disabled]="testItem.submissionCount === 0">Grade Test</button>
+          <button *ngIf="testItem.isTeacher && testItem.test.isGraded" mat-raised-button
+            (click)="openGradesDialog(testItem.test)">See grades</button>
+          <button *ngIf="!testItem.isTeacher && testItem.test.dueDate.toDate() > currentDate && !testItem.submitted"
+            mat-raised-button (click)="solveTest(testItem.test)">Solve Test</button>
+          <button *ngIf="!testItem.isTeacher && testItem.submitted && !testItem.test.isGraded" mat-raised-button
+            disabled>Submitted</button>
+          <div *ngIf="!testItem.isTeacher && testItem.submitted && testItem.test.isGraded">
+            <span class="grade">Grade: {{ testItem.grade | number:'1.2-2' }} / 10</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+
 </div>

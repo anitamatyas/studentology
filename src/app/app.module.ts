@@ -14,7 +14,6 @@ import { ClassListComponent } from './main-layout/class-list/class-list.componen
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import {MatListModule} from '@angular/material/list';
 import { StudSidenavComponent } from './main-layout/stud-sidenav/stud-sidenav.component';
-import { CalendarComponent } from './main-layout/calendar/calendar.component';
 import { AssignmentsComponent } from './main-layout/assignments/assignments.component';
 import { TestsComponent } from './main-layout/tests/tests.component';
 import { ClassService } from './services/class.service';
@@ -51,6 +50,8 @@ import { CreateClassDialogComponent } from './popups/create-class-dialog/create-
 import { SolveTestComponent } from './main-layout/tests/solve-test/solve-test.component';
 import { ConfirmDialogComponent } from './popups/confirm-dialog/confirm-dialog.component';
 import { GradesDialogComponent } from './popups/grades-dialog/grades-dialog.component';
+import { NgChartsModule } from 'ng2-charts';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,6 @@ import { GradesDialogComponent } from './popups/grades-dialog/grades-dialog.comp
     AuthComponent,
     MainLayoutComponent,
     StudSidenavComponent,
-    CalendarComponent,
     AssignmentsComponent,
     TestsComponent,
     ClassItemComponent,
@@ -105,6 +105,8 @@ import { GradesDialogComponent } from './popups/grades-dialog/grades-dialog.comp
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
+    NgChartsModule,
+    MatProgressSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
