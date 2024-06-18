@@ -29,6 +29,7 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   selectedFile: File | null = null;
   assignmentId: string | null = null;
+  noAssignments: boolean = false;
 
   //Doughnut Chart variables
   doughnutChartLabels: string[] = ['Submitted', 'Not Submitted', 'Expired'];
@@ -113,14 +114,17 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
         return this.fetchAssignmentsAndSubmissions(classIds, classTitles);
       })
     ).subscribe(assignments => {
+      console.log('assignments fetched');
       this.assignments = assignments;
+      this.noAssignments = assignments.length === 0;
       this.updateDoughnutChart();
       this.updateBarChart();
       this.isLoading = false;
       console.log(assignments);
     }, error => {
-      console.error('Failed to fetch assignments or roles:', error);
       this.isLoading = false;
+      this.noAssignments = true;
+      console.error('Failed to fetch assignments or roles:', error);
     });
     this.setChartColorsFromCSSVariables();
   }
@@ -129,6 +133,7 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     return this.assignmentService.getAssignmentsForClasses(classIds).pipe(
       switchMap(assignments => {
+        this.noAssignments = assignments.length === 0;
         const assignmentObservables = assignments.map(assignment => {
           return this.classService.getMemberRoleByUserIdAndClassId(this.loggedInUser.id, assignment.classId).pipe(
             switchMap(role => {
@@ -173,24 +178,34 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
 
   updateBarChart(): void {
     const classGrades: { [key: string]: number[] } = {};
+
     this.assignments.forEach(a => {
       if (!classGrades[a.classTitle]) {
         classGrades[a.classTitle] = [];
       }
-      if (a.assignment.isGraded) {
+      if (a.grade !== undefined) {
         classGrades[a.classTitle].push(a.grade);
+      } else if (new Date(a.assignment.dueDate.toDate()) < this.currentDate) {
+        classGrades[a.classTitle].push(0);
       }
     });
 
     this.barChartLabels = Object.keys(classGrades);
     this.barChartData.labels = this.barChartLabels;
+
     this.barChartData.datasets[0].data = this.barChartLabels.map(className => {
       const grades = classGrades[className];
+      if (grades.length === 0) {
+        return 0;
+      }
       const average = grades.reduce((acc, grade) => acc + grade, 0) / grades.length;
       return average;
     });
+
     this.charts.forEach(chart => chart.update());
   }
+
+
 
   setChartColorsFromCSSVariables() {
     const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--tertiary').trim();

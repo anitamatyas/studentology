@@ -167,3 +167,19 @@
     height: 2em;
     width: 2em;
 }
+
+.no-results {
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    border: 1px solid lightgray;
+    background-color: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    box-shadow: 0px 0px 4px 1px var(--quaternary);
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+    background-color: white;
+    padding: 3em 1.5em;
+    display: flex;
+}

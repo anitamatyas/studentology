@@ -1,9 +1,13 @@
 <div class="assignments-page-container">
   <h2>Assignments</h2>
 
-  <div *ngIf="isLoading" class="loading-container">
+  <div *ngIf="isLoading && !noAssignments" class="loading-container">
     <mat-spinner [color]="primary"></mat-spinner>
     <p>Loading...</p>
+  </div>
+
+  <div *ngIf="noAssignments" class="no-results">
+    <h3>No assignments yet</h3>
   </div>
 
   <div *ngIf="!isLoading">

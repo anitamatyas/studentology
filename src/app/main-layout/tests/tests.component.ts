@@ -26,6 +26,7 @@ export class TestsComponent implements OnInit, OnDestroy {
   currentDate: Date = new Date();
   @ViewChildren(BaseChartDirective) charts: QueryList<BaseChartDirective>;
   isLoading: boolean = true;
+  noTests : boolean = false;
 
   //Doughnut Chart variables
   doughnutChartLabels: string[] = ['Submitted', 'Not Submitted', 'Expired'];
@@ -119,6 +120,7 @@ export class TestsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.testService.getTestsForClasses(classIds).pipe(
       switchMap(tests => {
+        this.noTests = tests.length === 0;
         const testObservables = tests.map(test => {
           const parsedTestContent: TestContent = JSON.parse(test.testContent);
           return this.fetchRoleAndSubmissions(test, classTitles[test.classId]).pipe(

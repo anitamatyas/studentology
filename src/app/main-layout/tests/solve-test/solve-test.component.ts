@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Timestamp } from '@angular/fire/firestore';
@@ -28,7 +28,7 @@ export class SolveTestComponent implements OnInit, CanComponentDeactivate {
     private authService: AuthService,
     private testService: TestService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
