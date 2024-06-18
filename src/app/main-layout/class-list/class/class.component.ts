@@ -16,6 +16,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { EditNameDialogComponent } from '../../../popups/edit-name-dialog/edit-name-dialog.component';
 import { Assignment, Test } from '../../../interfaces/test.interface';
 import { Timestamp } from '@angular/fire/firestore';
+import { Note } from '../../../interfaces/notes.interface';
 
 @Component({
   selector: 'app-class',
@@ -40,6 +41,10 @@ export class ClassComponent  implements OnInit, OnDestroy {
   groups: Group[] = [];
   groupedMembers: { [groupId: string]: Member[] } = {};
   attachedFiles: File[] = [];
+  noteContent: string = '';
+  isEditing: boolean = false;
+  noteSubscription: Subscription;
+  noteId: string;
 
   constructor(
     private classService: ClassService,
@@ -85,6 +90,41 @@ export class ClassComponent  implements OnInit, OnDestroy {
       this.isTeacherInClass = this.getUserRoleInClass(this.user.id) === 'teacher';
       this.updateDisplayedColumns();
     });
+
+    this.noteSubscription = this.classService.getNoteForClassAndUser(this.selectedClassId, this.user.id)
+      .subscribe(note => {
+        if (note) {
+          this.noteContent = note.content;
+          this.noteId = note.id;
+        }
+      });
+  }
+
+  editNote() {
+    this.isEditing = true;
+  }
+
+  saveNote() {
+    this.isEditing = false;
+    const noteData: Note = {
+      classId: this.selectedClassId,
+      userId: this.user.id,
+      content: this.noteContent
+    };
+
+    if (this.noteId) {
+      this.classService.updateNote(this.noteId, noteData).then(() => {
+        console.log('Note updated successfully');
+      }).catch(error => {
+        console.error('Failed to update note:', error);
+      });
+    } else {
+      this.classService.saveNote(noteData).then(() => {
+        console.log('Note saved successfully');
+      }).catch(error => {
+        console.error('Failed to save note:', error);
+      });
+    }
   }
 
   onSubmit() {
@@ -329,5 +369,6 @@ export class ClassComponent  implements OnInit, OnDestroy {
     if (this.postsSubscription) this.postsSubscription.unsubscribe();
     if (this.classMemberSubscription) this.classMemberSubscription.unsubscribe();
     if (this.selectedClassSubscription) this.selectedClassSubscription.unsubscribe();
+    if (this.noteSubscription) this.noteSubscription.unsubscribe();
   }
 }

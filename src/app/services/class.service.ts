@@ -12,6 +12,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { DialogService } from "./dialog.service";
 import { Assignment, Test } from "../interfaces/test.interface";
+import { Note } from "../interfaces/notes.interface";
 
 // Define a color palette and a function to get a random color
 const colorPalette = ['#10439F', '#874CCC', '#C65BCF', '#F27BBD'];
@@ -308,5 +309,31 @@ export class ClassService {
             dueDate: test.dueDate  // Ensure the dueDate is a Firebase Timestamp
         };
         return testsCollection.add(testToSave).then();
+    }
+
+    getNoteForClassAndUser(classId: string, userId: string): Observable<Note> {
+        return this.firestore.collection('notes', ref => ref
+            .where('classId', '==', classId)
+            .where('userId', '==', userId))
+            .snapshotChanges()
+            .pipe(
+                map(actions => {
+                    const data = actions.map(a => {
+                        const data = a.payload.doc.data() as Note;
+                        const id = a.payload.doc.id;
+                        return { id, ...data };
+                    });
+                    return data[0];
+                })
+            );
+    }
+
+    saveNote(note: Note): Promise<void> {
+        const noteId = this.firestore.createId();
+        return this.firestore.collection('notes').doc(noteId).set(note);
+    }
+
+    updateNote(noteId: string, note: Note): Promise<void> {
+        return this.firestore.collection('notes').doc(noteId).update(note);
     }
 }
