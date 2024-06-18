@@ -40,12 +40,6 @@ export class AuthComponent {
     this.isLoading = true;
     const role = this.isStudent ? 'student' : 'teacher';
 
-    if (this.isSignUp && password !== confirmPassword) {
-      this.error = 'Passwords do not match';
-      this.isLoading = false;
-      return;
-    }
-
     let authObs: Observable<any>;
 
     if (this.isSignUp) {

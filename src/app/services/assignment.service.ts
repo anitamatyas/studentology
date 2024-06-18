@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Assignment, Submission } from '../interfaces/test.interface';
 
@@ -29,5 +29,14 @@ export class AssignmentService {
                 return { id, ...data };
             }))
         );
+    }
+
+    addSubmission(assignmentId: string, submission: Submission): Promise<void> {
+        const submissionId = this.firestore.createId();
+        return this.firestore.doc(`assignments/${assignmentId}/submissions/${submissionId}`).set(submission);
+    }
+
+    updateSubmissionGrade(assignmentId: string, submissionId: string, grade: number) {
+        return from(this.firestore.doc(`assignments/${assignmentId}/submissions/${submissionId}`).update({ grade }));
     }
 }

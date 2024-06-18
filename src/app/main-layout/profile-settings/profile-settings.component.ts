@@ -4,6 +4,7 @@ import { User } from '../../interfaces/user.interface';
 import { AuthService } from '../../services/auth.service';
 import { THEMES } from '../../services/themes';
 import { ThemeService } from '../../services/themes.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, Subscription } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
@@ -21,11 +22,13 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   updatedUsername: string;
   updatedEmail: string;
   selectedTheme: string;
+  selectedFile: File = null;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private storage: AngularFireStorage
   ) { }
 
   ngOnInit() {
@@ -55,17 +58,36 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
   saveChanges() {
     const updatedData = {
       username: this.updatedUsername,
-      email: this.updatedEmail
+      email: this.updatedEmail,
     };
 
-    console.log(updatedData);
+    if (this.selectedFile) {
+      const filePath = `profile_pictures/${this.loggedInUser.id}_${this.selectedFile.name}`;
+      const fileRef = this.storage.ref(filePath);
+      this.storage.upload(filePath, this.selectedFile).then(() => {
+        fileRef.getDownloadURL().subscribe(url => {
+          updatedData['profileUrl'] = url;
+          this.updateUserData(updatedData);
+        });
+      });
+    } else {
+      this.updateUserData(updatedData);
+    }
 
-    // Check if any data has changed
+    this.editMode = false;
+  }
+
+  updateUserData(updatedData: Partial<User>) {
     if (updatedData.username !== this.loggedInUser.username ||
-        updatedData.email !== this.loggedInUser.email) {
+        updatedData.email !== this.loggedInUser.email ||
+        updatedData['profileUrl']) {
       this.userService.updateUser(this.loggedInUser.id, updatedData).subscribe(() => {
         this.themeService.setTheme(this.selectedTheme);
       }, error => {
@@ -74,8 +96,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     } else {
       this.themeService.setTheme(this.selectedTheme);
     }
-
-    this.editMode = false;
   }
 
   ngOnDestroy() {

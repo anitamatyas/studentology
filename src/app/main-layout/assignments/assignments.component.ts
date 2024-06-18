@@ -2,14 +2,18 @@ import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/
 import { AuthService } from '../../services/auth.service';
 import { ClassService } from '../../services/class.service';
 import { Subscription, combineLatest, of } from 'rxjs';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
+import { switchMap, map, catchError, take, finalize } from 'rxjs/operators';
 import { User } from '../../interfaces/user.interface';
 import { DialogService } from '../../services/dialog.service';
 import { Router } from '@angular/router';
-import { Assignment } from '../../interfaces/test.interface';
+import { Assignment, Submission } from '../../interfaces/test.interface';
 import { AssignmentService } from '../../services/assignment.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions, ChartType, ChartData } from 'chart.js';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { Timestamp } from "@angular/fire/firestore";
+import { MatDialog } from '@angular/material/dialog';
+import { GradeAssignmentsDialogComponent } from '../../popups/grade-assignments-dialog/grade-assignments-dialog.component';
 
 @Component({
   selector: 'app-assignments',
@@ -23,6 +27,8 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
   currentDate: Date = new Date();
   @ViewChildren(BaseChartDirective) charts: QueryList<BaseChartDirective>;
   isLoading: boolean = true;
+  selectedFile: File | null = null;
+  assignmentId: string | null = null;
 
   //Doughnut Chart variables
   doughnutChartLabels: string[] = ['Submitted', 'Not Submitted', 'Expired'];
@@ -88,7 +94,8 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
     private classService: ClassService,
     private assignmentService: AssignmentService,
     private dialogService: DialogService,
-    private router: Router
+    private storage: AngularFireStorage,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -156,6 +163,11 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
     const submittedCount = this.assignments.filter(a => a.submitted).length;
     const notSubmittedCount = this.assignments.length - submittedCount;
     this.doughnutChartData.datasets[0].data = [submittedCount, notSubmittedCount];
+    this.doughnutChartData.datasets[0].backgroundColor = [
+      '#699869',
+      getComputedStyle(document.documentElement).getPropertyValue('--secondary').trim(),
+      '#da6262'
+    ];
     this.charts.forEach(chart => chart.update());
   }
 
@@ -181,9 +193,54 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
   }
 
   setChartColorsFromCSSVariables() {
-    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
     const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--tertiary').trim();
     this.doughnutChartData.datasets[0].backgroundColor = ['#699869', secondaryColor];
+  }
+
+  onFileSelected(event: Event, assignmentId: string) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.selectedFile = input.files[0];
+      this.assignmentId = assignmentId;
+    }
+  }
+
+  solveAssignment(assignment: Assignment) {
+    if (this.selectedFile && this.assignmentId === assignment.id) {
+      const filePath = `assignments/${assignment.id}/${this.selectedFile.name}`;
+      const fileRef = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, this.selectedFile);
+      const nowInSeconds = Math.ceil(Date.now() / 1000);
+      const newTimestamp = new Timestamp(nowInSeconds, 0);
+
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          fileRef.getDownloadURL().subscribe((url) => {
+            const newSubmission: Submission = {
+              studentId: this.loggedInUser.id,
+              submissionContent: url,
+              turnedInDate: Timestamp.now()
+            };
+            this.assignmentService.addSubmission(assignment.id, newSubmission).then(() => {
+              this.fetchAssignmentsAndSubmissions([assignment.classId], { [assignment.classId]: assignment.title });
+            });
+          });
+        })
+      ).subscribe();
+    }
+  }
+
+  openGradeAssignmentsDialog(assignmentId: string) {
+    const dialogRef = this.dialog.open(GradeAssignmentsDialogComponent, {
+      width: '600px',
+      data: { assignmentId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('closed');
+      }
+    });
   }
 
   ngOnDestroy() {

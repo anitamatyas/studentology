@@ -301,7 +301,6 @@ export class TestsComponent implements OnInit, OnDestroy {
   }
 
   setChartColorsFromCSSVariables() {
-    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
     const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--tertiary').trim();
     this.doughnutChartData.datasets[0].backgroundColor = ['#699869', secondaryColor];
   }

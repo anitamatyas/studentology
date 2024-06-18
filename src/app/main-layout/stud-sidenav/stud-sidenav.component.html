@@ -4,7 +4,7 @@
     [style.height]="collapsed ? '27px' : '55px'"
   >
       <img
-        src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png">
+        [src]="loggedInUser.profileUrl || loggedInUser.profilePic">
   </div>
   <a mat-list-item
     *ngFor="let item of navItems"

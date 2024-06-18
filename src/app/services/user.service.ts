@@ -49,6 +49,10 @@ export class UserService {
         );
     }
 
+    updateTheme(userId: string, theme: string): Observable<User> {
+        return this.updateUser(userId, { theme });
+    }
+
     getEmailByUserId(userId: string): Observable<string> {
         return this.firestore
             .collection<User>('users')

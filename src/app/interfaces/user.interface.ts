@@ -5,5 +5,7 @@ export interface User {
     createdDate: string;
     role: string;
     token: string;
-    profilePic?: string;
+    profilePic: string;
+    profileUrl?: string;
+    theme: string;
 }

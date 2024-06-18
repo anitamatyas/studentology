@@ -57,9 +57,10 @@
           </div>
         </div>
         <div class="right-container">
-          <button *ngIf="assignmentItem.isTeacher" mat-raised-button (click)="gradeAssignment(assignmentItem.assignment)">Grade Assignment</button>
+          <button *ngIf="assignmentItem.isTeacher" mat-raised-button (click)="openGradeAssignmentsDialog(assignmentItem.assignment.id)">Grade Assignment</button>
           <button *ngIf="!assignmentItem.isTeacher && assignmentItem.assignment.dueDate.toDate() > currentDate && !assignmentItem.submitted" mat-raised-button
-            (click)="solveAssignment(assignmentItem.assignment)">Solve Assignment</button>
+            (click)="solveAssignment(assignmentItem.assignment)">Hand in Assignment</button>
+            <input *ngIf="!assignmentItem.isTeacher && !assignmentItem.submitted && assignmentItem.assignment.dueDate.toDate() > currentDate" type="file" class="form-control" (change)="onFileSelected($event, assignmentItem.assignment.id)">
           <button *ngIf="!assignmentItem.isTeacher && assignmentItem.submitted && !assignmentItem.assignment.isGraded" mat-raised-button disabled>Submitted</button>
           <div *ngIf="!assignmentItem.isTeacher && assignmentItem.submitted && assignmentItem.assignment.isGraded">
             <span class="grade">Grade: {{ assignmentItem.grade | number:'1.2-2' }} / 10</span>

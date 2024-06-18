@@ -7,7 +7,8 @@
         </button>
       </div>
       <div class="profile-pic-wrapper">
-        <img [src]="loggedInUser.profilePic" alt="Profile Picture" class="profile-pic">
+        <img [src]="loggedInUser.profileUrl || loggedInUser.profilePic" alt="Profile Picture" class="profile-pic">
+        <input *ngIf="editMode" type="file" (change)="onFileSelected($event)">
       </div>
       <div class="username-wrapper">
         <h3>Username</h3>

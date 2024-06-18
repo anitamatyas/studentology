@@ -85,11 +85,12 @@ h2 {
     text-align: center;
     font-weight: 300;
     color: #565656;
-    letter-spacing: -3px;
+    letter-spacing: -1px;
     margin: .2em;
 
     @media (min-width: 768px) {
         font-size: 3em;
+        letter-spacing: -3px;
     }
 }
 
@@ -147,11 +148,11 @@ h2 {
     @media (min-width: 768px) {
         position: absolute;
         left: 3em;
-        bottom: 4em;
+        bottom: 3em;
         transform: none;
 
         .stud-logo {
-            height: 4em;
+            height: 3em;
             width: fit-content;
         }
     }

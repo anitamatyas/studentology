@@ -40,7 +40,8 @@ export class AuthService implements OnInit, OnDestroy{
                             createdDate: new Date().toISOString(),
                             role: role,
                             token: token,
-                            profilePic: profilePic
+                            profilePic: profilePic,
+                            theme: 'theme1'
                         };
                         return this.firestore.collection('users').doc(user.uid).set(newUser).then(() => {
                             this.handleAuth(newUser);
@@ -88,7 +89,9 @@ export class AuthService implements OnInit, OnDestroy{
             profilePic: userData.profilePic,
             role: userData.role,
             token: userData.token,
-            username: userData.username
+            username: userData.username,
+            profileUrl: userData.profileUrl,
+            theme: userData.theme
         })
     }
 

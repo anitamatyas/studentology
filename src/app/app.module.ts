@@ -52,6 +52,7 @@ import { ConfirmDialogComponent } from './popups/confirm-dialog/confirm-dialog.c
 import { GradesDialogComponent } from './popups/grades-dialog/grades-dialog.component';
 import { NgChartsModule } from 'ng2-charts';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { GradeAssignmentsDialogComponent } from './popups/grade-assignments-dialog/grade-assignments-dialog.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     CreateClassDialogComponent,
     SolveTestComponent,
     ConfirmDialogComponent,
-    GradesDialogComponent
+    GradesDialogComponent,
+    GradeAssignmentsDialogComponent
   ],
   imports: [
     BrowserModule,
