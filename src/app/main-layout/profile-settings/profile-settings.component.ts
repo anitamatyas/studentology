@@ -88,7 +88,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     if (updatedData.username !== this.loggedInUser.username ||
         updatedData.email !== this.loggedInUser.email ||
         updatedData['profileUrl']) {
-      this.userService.updateUser(this.loggedInUser.id, updatedData).subscribe(() => {
+      this.userService.updateUser(this.loggedInUser.id, updatedData).pipe(take(1)).subscribe(() => {
         this.themeService.setTheme(this.selectedTheme);
       }, error => {
         console.error('Failed to update user', error);

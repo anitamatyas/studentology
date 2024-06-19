@@ -1,25 +1,34 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, take } from 'rxjs';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Subscription, take } from 'rxjs';
 import { THEMES } from './themes';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
+import { User } from '../interfaces/user.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ThemeService {
+export class ThemeService implements OnDestroy {
     private themeSubject = new BehaviorSubject<string>('theme1');
     theme$ = this.themeSubject.asObservable();
+    themeSubscription : Subscription;
+    loggedInUserSub: Subscription;
+    loggedInUser: User;
+
 
     constructor(
         private authService: AuthService,
-        private userService: UserService) {
+        private userService: UserService)
+    {
+        this.loggedInUserSub = this.authService.getSignedInUserObservable().subscribe( user => {
+            this.loggedInUser = user;
+        })
     }
 
     public initializeTheme() {
-        this.authService.getSignedInUserObservable().pipe(
-            take(1)
-        ).subscribe(user => {
+        this.themeSubscription = this.authService.getSignedInUserObservable()
+        .pipe()
+        .subscribe(user => {
             if (user) {
                 const userTheme = user.theme || 'theme1';
                 this.themeSubject.next(userTheme);
@@ -37,17 +46,10 @@ export class ThemeService {
         if (theme) {
             this.themeSubject.next(themeName);
             this.updateCSSVariables(theme);
-
-            this.authService.getSignedInUserObservable().pipe(
-                take(1)
-            ).subscribe(user => {
-                if (user) {
-                    this.userService.updateTheme(user.id, themeName).subscribe(
-                        () => console.log('[THEME] - Theme saved to DB'),
-                        error => console.error('Failed to save theme to DB', error)
-                    );
-                }
-            });
+            this.userService.updateTheme(this.loggedInUser.id, themeName).pipe(take(1)).subscribe(
+                () => console.log('[THEME] - Theme saved to DB'),
+                error => console.error('Failed to save theme to DB', error)
+            );
         }
         console.log('[THEME] - Theme set to ', theme);
     }
@@ -60,5 +62,10 @@ export class ThemeService {
         Object.keys(theme).forEach(key => {
             document.documentElement.style.setProperty(`--${key}`, theme[key]);
         });
+    }
+
+    ngOnDestroy() {
+        if (this.themeSubscription) this.themeSubscription.unsubscribe();
+        if (this.loggedInUserSub) this.loggedInUserSub.unsubscribe();
     }
 }
