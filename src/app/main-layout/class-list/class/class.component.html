@@ -64,7 +64,7 @@
                     <th mat-header-cell *matHeaderCellDef> Profile </th>
                     <td mat-cell *matCellDef="let element">
                       <ng-container *ngIf="element.user">
-                        <img [src]="element.user.profilePic" alt="Profile Picture" class="profile-pic">
+                        <img [src]="element.user.profileUrl || element.user.profilePic " alt="Profile Picture" class="profile-pic">
                         {{element.user.username}}
                       </ng-container>
                     </td>

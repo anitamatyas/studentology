@@ -31,6 +31,7 @@ export class ClassComponent  implements OnInit, OnDestroy {
   postText: string = '';
   postsSubscription: Subscription;
   user: User;
+  userSubscription: Subscription;
   isTeacherInClass: boolean = false;
   classMembers: Member[] = [];
   classMembersAsUsers: User[] = [];
@@ -75,8 +76,9 @@ export class ClassComponent  implements OnInit, OnDestroy {
       this.posts = posts;
     });
 
-    // Get the signed-in user
-    this.user = this.authService.getSignedInUser();
+    this.userSubscription = this.authService.getSignedInUserObservable().subscribe( user => {
+      this.user = user;
+    })
 
     // Fetch class members with user details and groups
     this.classMemberSubscription = this.classService.getClassMembersWithUserDetails(this.selectedClassId).pipe(
