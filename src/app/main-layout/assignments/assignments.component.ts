@@ -126,7 +126,6 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
       this.noAssignments = true;
       console.error('Failed to fetch assignments or roles:', error);
     });
-    this.setChartColorsFromCSSVariables();
   }
 
   fetchAssignmentsAndSubmissions(classIds: string[], classTitles: { [key: string]: string }) {
@@ -165,9 +164,12 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
   }
 
   updateDoughnutChart(): void {
+    const totalAssignments = this.assignments.length;
     const submittedCount = this.assignments.filter(a => a.submitted).length;
-    const notSubmittedCount = this.assignments.length - submittedCount;
-    this.doughnutChartData.datasets[0].data = [submittedCount, notSubmittedCount];
+    const expiredAssignments = this.assignments.filter(assignment => new Date(assignment.assignment.dueDate.toDate()) < this.currentDate).length;
+    const notSubmittedCount = totalAssignments - submittedCount - expiredAssignments;
+
+    this.doughnutChartData.datasets[0].data = [submittedCount, notSubmittedCount, expiredAssignments];
     this.doughnutChartData.datasets[0].backgroundColor = [
       '#699869',
       getComputedStyle(document.documentElement).getPropertyValue('--secondary').trim(),
@@ -203,13 +205,6 @@ export class AssignmentsComponent implements OnInit, OnDestroy {
     });
 
     this.charts.forEach(chart => chart.update());
-  }
-
-
-
-  setChartColorsFromCSSVariables() {
-    const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--tertiary').trim();
-    this.doughnutChartData.datasets[0].backgroundColor = ['#699869', secondaryColor];
   }
 
   onFileSelected(event: Event, assignmentId: string) {
