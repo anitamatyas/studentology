@@ -367,6 +367,20 @@ export class ClassComponent  implements OnInit, OnDestroy {
     }
   }
 
+  makeTeacher(member: Member) {
+    const updatedMember: Member = { ...member, memberRole: 'teacher' };
+    this.classService.updateMemberRole(this.selectedClassId, member.id, updatedMember).then(() => {
+      this.dialogService.showInfoDialog('Success', 'Member role updated to teacher.');
+      const memberIndex = this.classMembers.findIndex(m => m.id === member.id);
+      if (memberIndex !== -1) {
+        this.classMembers[memberIndex].memberRole = 'teacher';
+        this.groupMembersByGroup();
+      }
+    }).catch(error => {
+      this.dialogService.showInfoDialog('Error', `Failed to update member role: ${error.message}`);
+    });
+  }
+
   ngOnDestroy() {
     if (this.postsSubscription) this.postsSubscription.unsubscribe();
     if (this.classMemberSubscription) this.classMemberSubscription.unsubscribe();

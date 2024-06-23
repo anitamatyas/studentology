@@ -82,6 +82,7 @@
                         <button mat-menu-item *ngIf="element.groupId != 'ungrouped'"
                           (click)="ungroupMember(element)">Remove member from group</button>
                         <button mat-menu-item (click)="deleteMemberFromClass(element)">Delete member from class</button>
+                        <button mat-menu-item *ngIf="element.memberRole === 'student'" (click)="makeTeacher(element)">Make teacher</button>
                       </mat-menu>
                     </td>
                   </ng-container>

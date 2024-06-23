@@ -336,4 +336,8 @@ export class ClassService {
     updateNote(noteId: string, note: Note): Promise<void> {
         return this.firestore.collection('notes').doc(noteId).update(note);
     }
+
+    updateMemberRole(classId: string, memberId: string, updatedMember: Member): Promise<void> {
+        return this.firestore.collection('classes').doc(classId).collection('members').doc(memberId).update(updatedMember);
+    }
 }
